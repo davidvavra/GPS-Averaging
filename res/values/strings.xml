@@ -1,8 +1,47 @@
 <resources>
-
+    
+    <!-- Layout -->
+    <string name="About">About</string>
+    <string name="RemoveAds">Remove Ads &amp; More</string>
+    <string name="CurrentCoordinates">Current coordinates: </string>
+    <string name="WaitingForGPS">Waiting for GPS …</string>
+    <string name="Map">Display Map</string>
+    <string name="ShareByEmail">Share by Email</string>
+    <string name="Export">Export to File</string>
+    <string name="ShakeHint">When you shake phone a little, you get better results.</string>
+    <string name="CompatibleApps">Compatible Apps</string>
+    <string name="Locus">Locus</string>
+    <string name="LocusDescription">Great tool for working with anything map or location-related. Online and offline maps. You can use GPS Averaging to create locations for Locus.</string>
+    <string name="LocusUrl">market://details?id=menion.android.locus</string>
+    <string name="Close">Close</string>
+    
+    <string name="YouDontHaveGPSEnabled">You don\'t have GPS enabled</string>
+    <string name="Altitude">Altitude: </string>
+    <string name="Feet"> ft</string>
+    <string name="StopAveraging">Stop averaging</string>
+    <string name="StartAveraging">Start averaging</string>
+    <string name="NewAveraging">New averaging</string>
+    <string name="OK">OK</string>
+    <string name="SelectApplication">Select application: </string>
+    <string name="ApplicationCantGenerateEmail">Application can\'t generate email</string>
+    <string name="AverageLocationExportedToFiles" formatted="true">Average location exported to directory "%1$s" and files:\nGPX: %2$s\nKML: %3$s</string>
+    <string name="ApplicationCantWriteFile" formatted="true">Application can\'t write GPX or KML file, because: %1$s</string>
+    <string name="CantCreateStorageDirectory" formatted="true">Application can\'t create directory %1$s. It\'s SD card enable?</string>
+    <string name="Measurements" formatted="true">%1$s measurements</string>
+     
+    <!-- Email -->
+    <string name="EmailSubject">Average coordinates from Android</string>
+    <string name="AverageCoordinates">Average coordinates: </string>
+    <string name="DecimalFormat">Decimal Format: </string>
+    <string name="AverageAltitude">Average altitude: </string>
+    <string name="EmailFooter">This coordinates were measured by Android app GPS Averaging created by Destil</string>
+    <string name="AveragedLocation">Averaged Location</string>  
+    
+    <!-- Constant -->
     <string name="app_name">GPS Averaging</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">GPS Averaging</string>
+    <string name="app_directory">GPSAveraging</string>
+    <string name="app_link" formatted="false">http://code.google.com/p/gps-averaging/</string>
+    <string name="app_no_ad_link" formatted="false">market://details?id=cz.destil.gpsaveraging</string>
+    
 
 </resources>
