@@ -4,18 +4,22 @@
         android:id="@+id/menu_email"
         android:icon="@drawable/ic_action_email"
         android:showAsAction="always"
-        android:title="@string/ShareByEmail"/>
+        android:title="@string/share_by_email"/>
     <item
         android:id="@+id/menu_export"
         android:showAsAction="never"
-        android:title="@string/Export"/>
+        android:title="@string/export"/>
     <item
         android:id="@+id/menu_remove_ads"
         android:showAsAction="never"
-        android:title="@string/RemoveAds"/>
+        android:title="@string/remove_ads"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:showAsAction="never"
+        android:title="@string/settings"/>
     <item
         android:id="@+id/menu_about"
         android:showAsAction="never"
-        android:title="@string/About"/>
+        android:title="@string/about"/>
 
 </menu>

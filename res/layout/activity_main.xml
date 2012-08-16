@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/CurrentCoordinates"
+                android:text="@string/current_coordinates"
                 android:textStyle="bold" />
 
             <TextView
@@ -79,7 +79,7 @@
                     android:id="@+id/avg_lat_lon_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/AverageCoordinates"
+                    android:text="@string/average_coordinates"
                     android:textStyle="bold" />
 
                 <TextView
@@ -117,7 +117,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/padding_large"
-        android:text="@string/StartAveraging" />
+        android:text="@string/start_averaging" />
 
     <com.google.ads.AdView
         android:id="@+id/adView"

@@ -50,7 +50,7 @@ public class Exporter {
 	public void toEmail(Measurements measurements) {
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
-		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, c.getString(R.string.EmailSubject));
+		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, c.getString(R.string.email_subject));
 		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, toEmailText(measurements));
 		c.startActivity(shareIntent);
 	}
@@ -72,7 +72,7 @@ public class Exporter {
 			}
 
 			if (!storeDirectory.exists()) {
-				return c.getString(R.string.CantCreateStorageDirectory, storeDirectory);
+				return c.getString(R.string.cant_create_storage_directory, storeDirectory);
 			}
 
 			final String dateFormatPattern = "%1$td-%<tm-%<tY_%<tH-%<tM-%<tS.%2$s";
@@ -89,10 +89,10 @@ public class Exporter {
 			toKMLString(measurements, kmlOut);
 			kmlOut.close();
 			// all OK
-			return c.getString(R.string.AverageLocationExportedToFiles, storeDirectory, gpxFile.getName(),
+			return c.getString(R.string.average_location_exported_to_files, storeDirectory, gpxFile.getName(),
 					kmlFile.getName());
 		} catch (IOException e) {
-			return c.getString(R.string.ApplicationCantWriteFile, e.getMessage());
+			return c.getString(R.string.application_cant_write_file, e.getMessage());
 		}
 	}
 
@@ -272,19 +272,19 @@ public class Exporter {
 		final StringBuilder output = new StringBuilder();
 		final Formatter formatter = new Formatter(output);
 
-		output.append(getContext().getString(R.string.AverageCoordinates)).append("\n");
+		output.append(getContext().getString(R.string.average_coordinates)).append("\n");
 		formatLatLonWithAccuracy(measurements.getAveragedLocation(), formatter, output);
 		output.append("\n\n");
 
-		output.append(getContext().getString(R.string.GoogleMapsLink)).append("\n");
+		output.append(getContext().getString(R.string.google_maps_link)).append("\n");
 		output.append("https://maps.google.com/?q=").append(String.valueOf(measurements.getLatitude())).append(",")
 				.append(String.valueOf(measurements.getLongitude())).append("\n\n");
 
-		output.append(getContext().getString(R.string.AverageAltitude));
+		output.append(getContext().getString(R.string.average_altitude));
 		formatLength(measurements.getAltitude(), formatter);
 		output.append("\n\n");
 
-		output.append(getContext().getString(R.string.EmailFooter)).append("\n");
+		output.append(getContext().getString(R.string.email_footer)).append("\n");
 		output.append(getContext().getString(R.string.app_link)).append("\n");
 
 		return output.toString();
@@ -382,7 +382,7 @@ public class Exporter {
 
 	/** Formats length for output in meter and feet. */
 	public void formatLength(double length, Formatter formatter) {
-		formatter.format(" %,.1f m (%,.1f %s)", length, length * 3.28132739, getContext().getString(R.string.Feet)); 
+		formatter.format(" %,.1f m (%,.1f %s)", length, length * 3.28132739, getContext().getString(R.string.feet)); 
 	}
 
 	/**
@@ -396,7 +396,7 @@ public class Exporter {
 		final StringBuilder alt = new StringBuilder();
 		final Formatter formatter = new Formatter(alt);
 
-		alt.append(getContext().getString(R.string.Altitude));
+		alt.append(getContext().getString(R.string.altitude));
 		formatLength(location.getAltitude(), formatter);
 
 		return alt.toString();

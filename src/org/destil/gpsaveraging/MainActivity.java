@@ -21,6 +21,7 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.Intent;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.GpsStatus.Listener;
@@ -126,6 +127,9 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 		case R.id.menu_export:
 			showAlert(exporter.toGpxAndKmlFiles(measurements));
 			break;
+		case R.id.menu_settings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -139,12 +143,12 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		showError(R.string.YouDontHaveGPSEnabled);
+		showError(R.string.you_dont_have_gps_enabled);
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		showError(R.string.WaitingForGPS);
+		showError(R.string.waiting_for_gps);
 	}
 
 	@Override
@@ -152,7 +156,7 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 		if (status == LocationProvider.AVAILABLE) {
 			showMainUi();
 		} else {
-			showError(R.string.GPSNotAvailable);
+			showError(R.string.gps_not_available);
 		}
 	}
 
@@ -167,7 +171,7 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 			for (@SuppressWarnings("unused") GpsSatellite satellite : satellites) {
 				all++;
 			}
-			uiSatellites.setText(getString(R.string.SatellitesInfo, all));
+			uiSatellites.setText(getString(R.string.satellites_info, all));
 		}
 	}
 
@@ -221,7 +225,7 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 	 */
 	private void stopAveraging() {
 		averaging = false;
-		uiStartStop.setText(R.string.NewAveraging);
+		uiStartStop.setText(R.string.new_averaging);
 		if (timer != null) {
 			timer.cancel();
 		}
@@ -232,7 +236,7 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 	 */
 	private void startAveraging() {
 		averaging = true;
-		uiStartStop.setText(R.string.StopAveraging);
+		uiStartStop.setText(R.string.stop_averaging);
 		measurements.clean();
 		uiAveraging.setVisibility(View.VISIBLE);
 		timer = new Timer();
@@ -249,7 +253,7 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 						uiAvgLatLon.setText(exporter.formatLatLon(averagedLocation));
 						uiAvgAcc.setText(exporter.formatAccuracy(averagedLocation));
 						uiAvgAlt.setText(exporter.formatAltitude(averagedLocation));
-						uiNoOfMeasurements.setText(getString(R.string.Measurements, measurements.size()));
+						uiNoOfMeasurements.setText(getString(R.string.measurements, measurements.size()));
 					}
 				});
 			}
@@ -262,7 +266,7 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 	private void showAlert(String text) {
 		final Builder alertDialog = new Builder(this);
 		alertDialog.setMessage(text);
-		alertDialog.setPositiveButton(R.string.OK, null);
+		alertDialog.setPositiveButton(R.string.ok, null);
 		alertDialog.show();
 	}
 
