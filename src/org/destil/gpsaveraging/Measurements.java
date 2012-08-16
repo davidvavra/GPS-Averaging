@@ -1,5 +1,5 @@
 /*
-   Copyright 2010 Libor Tvrdik
+   Copyright 2010 Libor Tvrdik, Destil
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import android.location.Location;
  * Group all the measurements. It allows the calculation of the weighted average
  * of the measured values and record times of measurement.
  * 
- * @author Libor Tvrdik (libor.tvrdik &lt;at&gt; gmail.com)
+ * @author Libor Tvrdik (libor.tvrdik@gmail.com), Destil
  */
 public class Measurements {
 

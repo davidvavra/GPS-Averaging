@@ -1,5 +1,5 @@
 /*
-   Copyright 2010 Libor Tvrdik
+   Copyright 2010 Libor Tvrdik, Destil
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -24,15 +24,16 @@ import java.util.Calendar;
 import java.util.Formatter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Environment;
 
-/** @author Libor Tvrdik (libor.tvrdik &lt;at&gt; gmail.com) */
+/** @author Libor Tvrdik (libor.tvrdik@gmail.com), Destil */
 public class Exporter {
 
-	public static final SimpleDateFormat XSD_DATETIME = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); 
-	public static final String ACCURACY_SYMBOL = "±"; 
+	public static final SimpleDateFormat XSD_DATETIME = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+	public static final String ACCURACY_SYMBOL = "±";
+	public static final String APP_DIRECTORY = "GPSAveraging";
+	public static final String APP_LINK = "https://play.google.com/store/apps/details?id=org.destil.gpsaveraging";
 
 	private final Context c;
 
@@ -45,17 +46,6 @@ public class Exporter {
 	}
 
 	/**
-	 * Exports averaged location via e-mail.
-	 */
-	public void toEmail(Measurements measurements) {
-		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-		shareIntent.setType("text/plain");
-		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, c.getString(R.string.email_subject));
-		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, toEmailText(measurements));
-		c.startActivity(shareIntent);
-	}
-
-	/**
 	 * Exports measurements into KML and GPX files.
 	 * 
 	 * @param measurements
@@ -63,9 +53,11 @@ public class Exporter {
 	 */
 	public String toGpxAndKmlFiles(Measurements measurements) {
 		try {
+			if (measurements.size() == 0) {
+				return c.getString(R.string.start_averaging_first);
+			}
 			final Calendar now = Calendar.getInstance();
-			final File storeDirectory = new File(Environment.getExternalStorageDirectory(),
-					c.getString(R.string.app_directory));
+			final File storeDirectory = new File(Environment.getExternalStorageDirectory(), APP_DIRECTORY);
 
 			if (!storeDirectory.exists()) {
 				storeDirectory.mkdirs();
@@ -126,7 +118,7 @@ public class Exporter {
 					.append(SimpleDateFormat.getTimeInstance().format(measurements.getTime(measurements.size() - 1)))
 					.append("</desc>\n");
 			output.append("\t<author>").append(getContext().getString(R.string.app_name)).append("</author>\n");
-			output.append("\t<link>").append(getContext().getString(R.string.app_link)).append("</link>\n");
+			output.append("\t<link>").append(APP_LINK).append("</link>\n");
 			output.append("\t<time>").append(XSD_DATETIME.format(measurements.getTime(0))).append("</time>\n\n");
 
 			output.append("\t<wpt lat=\"").append(String.valueOf(measurements.getLatitude())).append("\" lon=\"")
@@ -178,7 +170,7 @@ public class Exporter {
 		output.append("\t<name>Average Coordinates</name>\n");
 		output.append("\t<atom:author><atom:name>").append(getContext().getString(R.string.app_name))
 				.append("</atom:name></atom:author>\n");
-		output.append("\t<atom:link href=\"").append(getContext().getString(R.string.app_link)).append("\" />\n");
+		output.append("\t<atom:link href=\"").append(APP_LINK).append("\" />\n");
 
 		if (measurements.size() > 0) {
 
@@ -267,7 +259,7 @@ public class Exporter {
 	 * @param measurements
 	 *            list measured values for reading
 	 */
-	private String toEmailText(Measurements measurements) {
+	String toEmailText(Measurements measurements) {
 
 		final StringBuilder output = new StringBuilder();
 		final Formatter formatter = new Formatter(output);
@@ -277,15 +269,16 @@ public class Exporter {
 		output.append("\n\n");
 
 		output.append(getContext().getString(R.string.google_maps_link)).append("\n");
-		output.append("https://maps.google.com/?q=").append(String.valueOf(measurements.getLatitude())).append(",")
-				.append(String.valueOf(measurements.getLongitude())).append("\n\n");
+		output.append("https://maps.google.com/?q=");
+		formatter.format("%.5f,%.5f", measurements.getLatitude(), measurements.getLongitude());
+		output.append("\n\n");
 
-		output.append(getContext().getString(R.string.average_altitude));
+		output.append(getContext().getString(R.string.average_altitude)).append("\n");
 		formatLength(measurements.getAltitude(), formatter);
 		output.append("\n\n");
 
 		output.append(getContext().getString(R.string.email_footer)).append("\n");
-		output.append(getContext().getString(R.string.app_link)).append("\n");
+		output.append(APP_LINK).append("\n");
 
 		return output.toString();
 	}
@@ -307,26 +300,42 @@ public class Exporter {
 	}
 
 	/** Coordinate format to a readable format (degrees - DDD MM.MMM) */
-	public Appendable formatLatLon(Location location, Formatter formatter, Appendable output) throws IOException {
+	private Appendable formatLatLon(Location location, Formatter formatter, Appendable output) throws IOException {
+		formatCoordinate(location.getLatitude(), true, formatter, output);
+		output.append("\n");
+		formatCoordinate(location.getLongitude(), false, formatter, output);
+		return output;
+	}
 
-		output.append(location.getLatitude() > 0 ? " N" : " S");
+	/**
+	 * Formats single lat/lon coordinate according to format in settings.
+	 */
+	private Appendable formatCoordinate(double coordinate, boolean lat, Formatter formatter, Appendable output)
+			throws IOException {
+		String format = SettingsActivity.getCoordinateFormat(c);
+		if (format.equals(SettingsActivity.COORDS_DECIMAL)) {
+			formatter.format("%.5f", coordinate);
+		} else {
+			if (lat) {
+				output.append(coordinate > 0 ? "N " : "S ");
+			} else {
+				// lon
+				output.append(coordinate > 0 ? "E " : "W ");
+			}
+			// calculations for formats
+			double decimalDegrees = Math.abs(coordinate);
+			int onlyDegrees = (int) decimalDegrees;
+			double decimalMinutes = (decimalDegrees - onlyDegrees) * 60;
 
-		final double lat = Math.abs(location.getLatitude());
-		final int latDegree = (int) lat;
-		final double latMinute = (lat - latDegree) * 60;
-		// Second format parameter, fixed zero padding mistake for floating
-		// point number
-		formatter.format("%02d° %s%.3f ", latDegree, (latMinute < 10 ? "0" : ""), latMinute);
-
-		output.append(location.getLongitude() > 0 ? " E" : " W");
-
-		final double lon = Math.abs(location.getLongitude());
-		final int lonDegree = (int) lon;
-		final double lonMinute = (lon - lonDegree) * 60;
-		// Second format parameter, fixed zero padding mistake for floating
-		// point number
-		formatter.format("%03d° %s%.3f ", lonDegree, (lonMinute < 10 ? "0" : ""), lonMinute);
-
+			if (format.equals(SettingsActivity.COORDS_MINUTES)) {
+				formatter.format("%d° %s%.3f'", onlyDegrees, (decimalMinutes < 10 ? "0" : ""), decimalMinutes);
+			} else {
+				// seconds format
+				int onlyMinutes = (int) decimalMinutes;
+				double decimalSeconds = (decimalMinutes - onlyMinutes) * 60;
+				formatter.format("%d° %d' %.3f''", onlyDegrees, onlyMinutes, decimalSeconds);
+			}
+		}
 		return output;
 	}
 
@@ -334,20 +343,19 @@ public class Exporter {
 	 * Coordinate format to a readable format (degrees - DDD MM.MMM) � accuracy.
 	 */
 	public String formatLatLonWithAccuracy(Location location) {
-
 		final StringBuilder output = new StringBuilder();
 		final Formatter formatter = new Formatter(output);
-			formatLatLonWithAccuracy(location, formatter, output);
-
+		formatLatLonWithAccuracy(location, formatter, output);
 		return output.toString();
 	}
 
 	/**
-	 * Coordinate format to a readable format (degrees - DDD MM.MMM) � accuracy.
+	 * Coordinate format to a readable format (degrees - DDD MM.MMM) accuracy.
 	 */
 	public Appendable formatLatLonWithAccuracy(Location location, Formatter formatter, Appendable output) {
 		try {
 			formatLatLon(location, formatter, output);
+			output.append("\n");
 			formatAccuracy(location, formatter, output);
 			return output;
 		} catch (IOException e) {
@@ -355,12 +363,10 @@ public class Exporter {
 		}
 	}
 
-	/** Format � accuracy in meter and feet. */
+	/** Format accuracy in meter and feet. */
 	public String formatAccuracy(Location location) {
-
 		final StringBuilder output = new StringBuilder();
 		final Formatter formatter = new Formatter(output);
-
 		try {
 			formatAccuracy(location, formatter, output);
 		} catch (IOException ex) {
@@ -371,18 +377,21 @@ public class Exporter {
 		return output.toString();
 	}
 
-	/** Format � accuracy in meter and feet. */
+	/** Format accuracy in meter and feet. */
 	public Appendable formatAccuracy(Location location, Formatter formatter, Appendable output) throws IOException {
-
 		output.append(ACCURACY_SYMBOL);
 		formatLength(location.getAccuracy(), formatter);
-
 		return output;
 	}
 
 	/** Formats length for output in meter and feet. */
 	public void formatLength(double length, Formatter formatter) {
-		formatter.format(" %,.1f m (%,.1f %s)", length, length * 3.28132739, getContext().getString(R.string.feet)); 
+		if (SettingsActivity.getUnitsFormat(c).equals(SettingsActivity.UNITS_METRIC)) {
+			formatter.format(" %,.1f m", length);
+		} else {
+			// imperial units
+			formatter.format(" %,.1f %s", length * 3.28132739, getContext().getString(R.string.feet));
+		}
 	}
 
 	/**

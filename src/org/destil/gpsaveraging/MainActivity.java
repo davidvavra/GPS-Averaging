@@ -18,10 +18,14 @@ package org.destil.gpsaveraging;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.Activity;
+import net.robotmedia.billing.BillingController;
+import net.robotmedia.billing.BillingRequest.ResponseCode;
+import net.robotmedia.billing.helper.AbstractBillingActivity;
+import net.robotmedia.billing.model.Transaction.PurchaseState;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.GpsStatus.Listener;
@@ -30,6 +34,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,15 +43,18 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
-public class MainActivity extends Activity implements LocationListener, OnClickListener, Listener {
+public class MainActivity extends AbstractBillingActivity implements LocationListener, OnClickListener, Listener {
 
 	private static final String GPS = "gps"; // type of location
 	private static final int MEASUREMENT_DELAY = 2000; // delay between
 														// measurements
+	private static final String BILLING_ITEMID = "cz.destil.gpsaveraging.full";
+	public static boolean isFullVersion = false;
 
 	private LocationManager locationManager;
 	private Exporter exporter;
@@ -67,6 +75,7 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 	private TextView uiAvgAlt;
 	private TextView uiNoOfMeasurements;
 	private TextView uiSatellites;
+	private AdView uiAd;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -89,8 +98,12 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 		uiAvgAlt = (TextView) findViewById(R.id.avg_alt);
 		uiNoOfMeasurements = (TextView) findViewById(R.id.no_of_measurements);
 		uiAveraging = (LinearLayout) findViewById(R.id.avg_ui);
+		uiAd = (AdView) this.findViewById(R.id.adView);
 		uiStartStop.setOnClickListener(this);
-		loadAd();
+		isFullVersion = verifyFullVersion();
+		if (!isFullVersion) {
+			loadAd();
+		}
 	}
 
 	@Override
@@ -119,16 +132,33 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 	}
 
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		menu.findItem(R.id.menu_remove_ads).setVisible(!isFullVersion);
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_email:
-			exporter.toEmail(measurements);
+			shareViaEmail();
 			break;
 		case R.id.menu_export:
-			showAlert(exporter.toGpxAndKmlFiles(measurements));
+			if (isFullVersion) {
+				showAlert(exporter.toGpxAndKmlFiles(measurements));
+			} else {
+				requestPurchase(BILLING_ITEMID);
+			}
+			break;
+		case R.id.menu_remove_ads:
+			requestPurchase(BILLING_ITEMID);
 			break;
 		case R.id.menu_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
+			break;
+		case R.id.menu_about:
+			startActivity(new Intent(this, AboutActivity.class));
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -168,7 +198,8 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 			GpsStatus gpsStatus = locationManager.getGpsStatus(null);
 			int all = 0;
 			Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
-			for (@SuppressWarnings("unused") GpsSatellite satellite : satellites) {
+			for (@SuppressWarnings("unused")
+			GpsSatellite satellite : satellites) {
 				all++;
 			}
 			uiSatellites.setText(getString(R.string.satellites_info, all));
@@ -185,11 +216,51 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 		}
 	}
 
+	@Override
+	public byte[] getObfuscationSalt() {
+		return new byte[] { 41, -91, -116, -41, 66, -53, 123, -110, -127, -96, -88, 77, 127, 115, 1, 73, 57, 1, 48,
+				-116 };
+	}
+
+	@Override
+	public String getPublicKey() {
+		return "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAI7VpOWr5kaWDxvyi3Vb7R9NjfCfsE76GdWt8z/pq0yuGJjT/DMpWLU8xwy4CYhEkCEpzJsEtpUW5dFgyCzCjSl8uucgOQ75JnhUEB7bQYbmUNLAQDcC6D7IERS29pdHzJksirK/psY9bFSJc6wy1thFAMi3m3HamhtWN7vH+WVvTCb6RL2QLLcu5VMs1rnHQ3/CidLaU4saCMI6AAivfEZqJJa1BUm+sI/w2BeWIC3c430b2nBnpEFePCd7KDXXkVpvdfUhNaA9S2OmJVf60sBsM2++/s+W8YB+PmTP1sgzUsqg4WXH8mD+yz1Gqh7MLqj8t7cx+Ra2Y/6NrqIkwIDAQAB";
+	}
+
+	@Override
+	public void onBillingChecked(boolean supported) {
+		// ignore
+	}
+
+	@Override
+	public void onSubscriptionChecked(boolean supported) {
+		// ignore
+	}
+
+	@Override
+	public void onPurchaseStateChanged(String itemId, PurchaseState state) {
+		Log.d("TAG", "statechanged=" + itemId + state);
+		if (itemId.equals(BILLING_ITEMID)) {
+			if (state == PurchaseState.PURCHASED) {
+				isFullVersion = true;
+				// hide ad
+				uiAd.setVisibility(View.GONE);
+			} else {
+				isFullVersion = false;
+			}
+		}
+	}
+
+	@Override
+	public void onRequestPurchaseResponse(String itemId, ResponseCode response) {
+		// ignore
+		Log.d("TAG", "purschaseresponse=" + itemId + response);
+	}
+
 	/**
 	 * Loads AdMob ad.
 	 */
 	private void loadAd() {
-		AdView adView = (AdView) this.findViewById(R.id.adView);
 		AdRequest adrequest = new AdRequest();
 		adrequest.addKeyword("geocaching");
 		adrequest.addKeyword("gps");
@@ -197,7 +268,10 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 		adrequest.addKeyword("measurements");
 		adrequest.addKeyword("places");
 		adrequest.addKeyword("check in");
-		adView.loadAd(adrequest);
+		adrequest.addTestDevice("246237F4C0DB8A19F6F0DB3925B49300"); // My
+																		// Galaxy
+																		// Nexus
+		uiAd.loadAd(adrequest);
 	}
 
 	/**
@@ -228,6 +302,18 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 		uiStartStop.setText(R.string.new_averaging);
 		if (timer != null) {
 			timer.cancel();
+		}
+		// Intent API & Locus integration
+		if (measurements.size() > 0 && getIntent().getAction().equals("menion.android.locus.GET_POINT")
+				|| getIntent().getAction().equals("cz.destil.gpsaveraging.AVERAGED_LOCATION")) {
+			Intent intent = new Intent();
+			intent.putExtra("name", getString(R.string.average_coordinates));
+			intent.putExtra("latitude", measurements.getLatitude());
+			intent.putExtra("longitude", measurements.getLongitude());
+			intent.putExtra("altitude", measurements.getAltitude());
+			intent.putExtra("accuracy", (double) measurements.getAccuracy());
+			setResult(RESULT_OK, intent);
+			finish();
 		}
 	}
 
@@ -268,6 +354,36 @@ public class MainActivity extends Activity implements LocationListener, OnClickL
 		alertDialog.setMessage(text);
 		alertDialog.setPositiveButton(R.string.ok, null);
 		alertDialog.show();
+	}
+
+	/**
+	 * Exports averaged location via e-mail.
+	 */
+	private void shareViaEmail() {
+		if (measurements.size() == 0) {
+			Toast.makeText(this, R.string.start_averaging_first, Toast.LENGTH_LONG).show();
+		} else {
+			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+			shareIntent.setType("text/plain");
+			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
+			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, exporter.toEmailText(measurements));
+			startActivity(shareIntent);
+		}
+	}
+
+	/**
+	 * Verifies if user has bought full version.
+	 */
+	private boolean verifyFullVersion() {
+		if (BillingController.isPurchased(this, BILLING_ITEMID)) {
+			return true;
+		} else {
+			// check for previous ad-free version
+			if (getPackageManager().checkSignatures("org.destil.gpsaveraging", "cz.destil.gpsaveraging") == PackageManager.SIGNATURE_MATCH) {
+				return true;
+			}
+			return false;
+		}
 	}
 
 }
