@@ -1,5 +1,5 @@
 /*
-   Copyright 2010 Libor Tvrdik, Destil
+   Copyright 2010 Libor Tvrdik, David "Destil" Vavra
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -88,7 +88,15 @@ public class Measurements {
 		// calculating accuracy improved by averaging
 		double distance = distance(location.getLatitude(), location.getLongitude(), averageLat, averageLon);
 		if (distance == 0) {
-			distance = (location.getAccuracy() == 0 ? 1 : location.getAccuracy());
+			distance = (location.getAccuracy() == 0 ? 5 : location.getAccuracy());
+		}
+		if (locations.size() > 1) {
+			// same locations next to each other doesn't improve accuracy
+			double previousLat = locations.get(locations.size() - 2).getLatitude();
+			double previousLon = locations.get(locations.size() - 2).getLongitude();
+			if (location.getLatitude() == previousLat && location.getLongitude() == previousLon) {
+				distance = location.getAccuracy();
+			}
 		}
 		distanceFromAverageCoordsSum += distance;
 		averageAccuracy = distanceFromAverageCoordsSum / size();
@@ -100,7 +108,7 @@ public class Measurements {
 	 */
 	public synchronized Location getAveragedLocation() {
 
-		final Location location = new Location("average"); 
+		final Location location = new Location("average");
 		location.setLatitude(getLatitude());
 		location.setLongitude(getLongitude());
 		location.setAccuracy(getAccuracy());
@@ -187,18 +195,18 @@ public class Measurements {
 
 		StringBuffer sb = new StringBuffer();
 
-		sb.append(getClass().getSimpleName()).append(": ("); 
-		sb.append("avg lat=").append(getLatitude()); 
-		sb.append(" lon=").append(getLongitude()); 
-		sb.append(" alt=").append(getAltitude()); 
-		sb.append(" acc=").append(getAccuracy()).append(" ");  
+		sb.append(getClass().getSimpleName()).append(": (");
+		sb.append("avg lat=").append(getLatitude());
+		sb.append(" lon=").append(getLongitude());
+		sb.append(" alt=").append(getAltitude());
+		sb.append(" acc=").append(getAccuracy()).append(" ");
 		for (int i = 0; i < size(); i++) {
-			sb.append("[").append(getLongitude(i)).append(",");  
-			sb.append(getLatitude(i)).append(","); 
-			sb.append(getAltitude(i)).append(","); 
-			sb.append(getAccuracy(i)).append("]"); 
+			sb.append("[").append(getLongitude(i)).append(",");
+			sb.append(getLatitude(i)).append(",");
+			sb.append(getAltitude(i)).append(",");
+			sb.append(getAccuracy(i)).append("]");
 		}
-		sb.append(")"); 
+		sb.append(")");
 
 		return sb.toString();
 	}

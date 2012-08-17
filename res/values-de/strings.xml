@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Layout -->
+	<string name="remove_ads">Werbung entfernen &amp; mehr</string>
+	<string name="current_coordinates">Aktuelle Koordinaten:</string>
+	<string name="waiting_for_gps">Warte auf GPS...</string>
+	<string name="share_by_email">Per E-Mail teilen</string>
+	<string name="export">Dateiexport</string>
+	<string name="you_dont_have_gps_enabled">GPS ist nicht aktiviert</string>
+	<string name="gps_not_available">GPS ist nicht verfügbar</string>
+	<string name="altitude">Höhe:</string>
+	<string name="feet">ft</string>
+	<string name="stop_averaging">Mittelung beenden</string>
+	<string name="start_averaging">Mittelung starten</string>
+	<string name="new_averaging">Neue Mittelung</string>
+	<string name="ok">OK</string>
+	<string formatted="true" name="average_location_exported_to_files">Gemittelte Position in Ordner \"%1$s\" exportiert. Dateien:\nGPX: %2$s\nKML: %3$s</string>
+	<string formatted="true" name="application_cant_write_file">Datei kann nicht geschrieben werden, weil: %1$s</string>
+	<string formatted="true" name="cant_create_storage_directory">Ordner kann nicht erstellt werden: %1$s</string>
+	<string formatted="true" name="measurements">%1$s Messungen</string>
+	<string formatted="true" name="satellites_info">%1$s Satelliten sichtbar</string>
+	<string name="start_averaging_first">Zuerst Mittelung starten</string>
+	<!-- Email -->
+	<string name="email_subject">Deine gemittelte Position</string>
+	<string name="average_coordinates">Gemittelte Position:</string>
+	<string name="google_maps_link">Google Maps link:</string>
+	<string name="average_altitude">Gemittelte Höhe:</string>
+	<string name="email_footer">Diese Koordinaten wurde durch die Android App \"GPS Averaging\" von Destil ermittelt</string>
+	<!-- Settings -->
+	<string name="settings">Einstellungen</string>
+	<string name="coordinate_format">Koordinatenformat</string>
+	<string name="units">Einheiten</string>
+	<string name="metric">Metrisch</string>
+	<string name="imperial">Imperial (US)</string>
+	<!-- About -->
+	<string name="about">Info</string>
+	<string name="rate_label">Magst Du GPS Averaging?</string>
+	<string name="rate_action">Auf Google Play bewerten</string>
+	<string name="mail_label">Probleme?</string>
+	<string name="mail_action">Feedback E-Mail senden</string>
+	<string name="web_label">Interessiert an Open Source, API?</string>
+	<string name="web_action">GitHub besuchen</string>
+	<string name="created_by">Erstellt von</string>
+	<string name="thank_you">Danke für Deine Unterstützung dieser App!</string>
+	<string name="version">Version</string>
+	<string name="problem_report">GPS Averaging Problem Report</string>
+	<string name="problem_report_body">Welches Telefon besitzt Du?\n%1$s\n\nBeschreibe Dein Problem im Detail:\n\n</string>
+</resources>

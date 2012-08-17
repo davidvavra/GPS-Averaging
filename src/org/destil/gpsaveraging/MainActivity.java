@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Destil, Libor Tvrdik
+ * Copyright 2010 David "Destil" Vavra, Libor Tvrdik
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.TimerTask;
 
 import net.robotmedia.billing.BillingController;
 import net.robotmedia.billing.BillingRequest.ResponseCode;
-import net.robotmedia.billing.helper.AbstractBillingActivity;
+import net.robotmedia.billing.helper.AbstractBillingObserver;
 import net.robotmedia.billing.model.Transaction.PurchaseState;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -34,9 +34,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -45,10 +42,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
-public class MainActivity extends AbstractBillingActivity implements LocationListener, OnClickListener, Listener {
+public class MainActivity extends SherlockActivity implements LocationListener, OnClickListener, Listener {
 
 	private static final String GPS = "gps"; // type of location
 	private static final int MEASUREMENT_DELAY = 2000; // delay between
@@ -61,6 +61,7 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 	private boolean averaging = false;
 	private Timer timer;
 	private Measurements measurements;
+	private AbstractBillingObserver billingObserver;
 	// UI elements
 	private LinearLayout uiGpsOff;
 	private TextView uiGpsOffText;
@@ -100,10 +101,7 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 		uiAveraging = (LinearLayout) findViewById(R.id.avg_ui);
 		uiAd = (AdView) this.findViewById(R.id.adView);
 		uiStartStop.setOnClickListener(this);
-		isFullVersion = verifyFullVersion();
-		if (!isFullVersion) {
-			loadAd();
-		}
+		initBilling();
 	}
 
 	@Override
@@ -126,8 +124,14 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 	}
 
 	@Override
+	protected void onDestroy() {
+		BillingController.unregisterObserver(billingObserver);
+		super.onDestroy();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
+		getSupportMenuInflater().inflate(R.menu.menu_main, menu);
 		return true;
 	}
 
@@ -148,11 +152,11 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 			if (isFullVersion) {
 				showAlert(exporter.toGpxAndKmlFiles(measurements));
 			} else {
-				requestPurchase(BILLING_ITEMID);
+				BillingController.requestPurchase(this, BILLING_ITEMID);
 			}
 			break;
 		case R.id.menu_remove_ads:
-			requestPurchase(BILLING_ITEMID);
+			BillingController.requestPurchase(this, BILLING_ITEMID);
 			break;
 		case R.id.menu_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
@@ -190,6 +194,7 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 		}
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void onGpsStatusChanged(int status) {
 		if (status == GpsStatus.GPS_EVENT_FIRST_FIX) {
@@ -198,11 +203,12 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 			GpsStatus gpsStatus = locationManager.getGpsStatus(null);
 			int all = 0;
 			Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
-			for (@SuppressWarnings("unused")
-			GpsSatellite satellite : satellites) {
+			for (GpsSatellite satellite : satellites) {
 				all++;
 			}
 			uiSatellites.setText(getString(R.string.satellites_info, all));
+		} else if (status == GpsStatus.GPS_EVENT_STOPPED) {
+			showError(R.string.gps_not_available);
 		}
 	}
 
@@ -216,45 +222,10 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 		}
 	}
 
-	@Override
-	public byte[] getObfuscationSalt() {
-		return new byte[] { 41, -91, -116, -41, 66, -53, 123, -110, -127, -96, -88, 77, 127, 115, 1, 73, 57, 1, 48,
-				-116 };
-	}
-
-	@Override
-	public String getPublicKey() {
-		return "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAI7VpOWr5kaWDxvyi3Vb7R9NjfCfsE76GdWt8z/pq0yuGJjT/DMpWLU8xwy4CYhEkCEpzJsEtpUW5dFgyCzCjSl8uucgOQ75JnhUEB7bQYbmUNLAQDcC6D7IERS29pdHzJksirK/psY9bFSJc6wy1thFAMi3m3HamhtWN7vH+WVvTCb6RL2QLLcu5VMs1rnHQ3/CidLaU4saCMI6AAivfEZqJJa1BUm+sI/w2BeWIC3c430b2nBnpEFePCd7KDXXkVpvdfUhNaA9S2OmJVf60sBsM2++/s+W8YB+PmTP1sgzUsqg4WXH8mD+yz1Gqh7MLqj8t7cx+Ra2Y/6NrqIkwIDAQAB";
-	}
-
-	@Override
-	public void onBillingChecked(boolean supported) {
-		// ignore
-	}
-
-	@Override
-	public void onSubscriptionChecked(boolean supported) {
-		// ignore
-	}
-
-	@Override
-	public void onPurchaseStateChanged(String itemId, PurchaseState state) {
-		Log.d("TAG", "statechanged=" + itemId + state);
-		if (itemId.equals(BILLING_ITEMID)) {
-			if (state == PurchaseState.PURCHASED) {
-				isFullVersion = true;
-				// hide ad
-				uiAd.setVisibility(View.GONE);
-			} else {
-				isFullVersion = false;
-			}
-		}
-	}
-
-	@Override
-	public void onRequestPurchaseResponse(String itemId, ResponseCode response) {
-		// ignore
-		Log.d("TAG", "purschaseresponse=" + itemId + response);
+	public static Intent getIntent(Context context) {
+		Intent intent = new Intent(context, MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		return intent;
 	}
 
 	/**
@@ -268,9 +239,8 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 		adrequest.addKeyword("measurements");
 		adrequest.addKeyword("places");
 		adrequest.addKeyword("check in");
-		adrequest.addTestDevice("246237F4C0DB8A19F6F0DB3925B49300"); // My
-																		// Galaxy
-																		// Nexus
+		adrequest.addTestDevice("246237F4C0DB8A19F6F0DB3925B49300"); // My GN
+		adrequest.addTestDevice("FDFCCBA0DA6971C00B0DE1227525504B"); // My N1
 		uiAd.loadAd(adrequest);
 	}
 
@@ -278,10 +248,12 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 	 * Hides error screen and shows main UI.
 	 */
 	private void showMainUi() {
-		uiGpsOn.setVisibility(View.VISIBLE);
-		uiGpsOff.setVisibility(View.GONE);
-		uiAveraging.setVisibility(View.GONE);
-		uiStartStop.setEnabled(true);
+		if (uiGpsOn.getVisibility() != View.VISIBLE) {
+			uiGpsOn.setVisibility(View.VISIBLE);
+			uiGpsOff.setVisibility(View.GONE);
+			uiAveraging.setVisibility(View.GONE);
+			uiStartStop.setEnabled(true);
+		}
 	}
 
 	/**
@@ -304,8 +276,11 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 			timer.cancel();
 		}
 		// Intent API & Locus integration
-		if (measurements.size() > 0 && getIntent().getAction().equals("menion.android.locus.GET_POINT")
-				|| getIntent().getAction().equals("cz.destil.gpsaveraging.AVERAGED_LOCATION")) {
+		if (measurements != null
+				&& measurements.size() > 0
+				&& getIntent().getAction() != null
+				&& (getIntent().getAction().equals("menion.android.locus.GET_POINT") || getIntent().getAction().equals(
+						"cz.destil.gpsaveraging.AVERAGED_LOCATION"))) {
 			Intent intent = new Intent();
 			intent.putExtra("name", getString(R.string.average_coordinates));
 			intent.putExtra("latitude", measurements.getLatitude());
@@ -368,6 +343,50 @@ public class MainActivity extends AbstractBillingActivity implements LocationLis
 			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
 			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, exporter.toEmailText(measurements));
 			startActivity(shareIntent);
+		}
+	}
+
+	/**
+	 * Initializes in-app billing.
+	 */
+	private void initBilling() {
+		billingObserver = new AbstractBillingObserver(this) {
+
+			@Override
+			public void onPurchaseStateChanged(String itemId, PurchaseState state) {
+				if (itemId.equals(BILLING_ITEMID)) {
+					if (state == PurchaseState.PURCHASED) {
+						isFullVersion = true;
+						// hide ad
+						uiAd.setVisibility(View.GONE);
+					} else {
+						isFullVersion = false;
+					}
+				}
+			}
+
+			@Override
+			public void onBillingChecked(boolean supported) {
+				if (supported && !billingObserver.isTransactionsRestored()) {
+					BillingController.restoreTransactions(MainActivity.this);
+				}
+			}
+
+			@Override
+			public void onSubscriptionChecked(boolean supported) {
+				// ignore
+			}
+
+			@Override
+			public void onRequestPurchaseResponse(String itemId, ResponseCode response) {
+				// ignore
+			}
+		};
+		BillingController.registerObserver(billingObserver);
+		BillingController.checkBillingSupported(this);
+		isFullVersion = verifyFullVersion();
+		if (!isFullVersion) {
+			loadAd();
 		}
 	}
 

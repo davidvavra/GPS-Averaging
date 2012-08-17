@@ -1,5 +1,5 @@
 /*
-   Copyright 2010 Destil
+   Copyright 2012 David "Destil" Vavra
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -20,8 +20,10 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.ListPreference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 /**
  * Settings for units and coordinate format. It is using deprecated
@@ -30,7 +32,7 @@ import android.preference.PreferenceManager;
  * 
  * @author Destil
  */
-public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class SettingsActivity extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 
 	private static final String UNITS = "UNITS";
 	private static final String COORDINATE_FORMAT = "COORDINATE_FORMAT";
@@ -54,7 +56,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// TODO: getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		addPreferencesFromResource(R.xml.activity_preferences);
 		uiUnits = (ListPreference) findPreference(UNITS);
 		uiCoordinateFormat = (ListPreference) findPreference(COORDINATE_FORMAT);
@@ -86,6 +88,18 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			if (uiCoordinateFormat.getEntry() != null) {
 				uiCoordinateFormat.setSummary(uiCoordinateFormat.getEntry());
 			}
+		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+			startActivity(MainActivity.getIntent(this));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
