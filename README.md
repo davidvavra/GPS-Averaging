@@ -21,8 +21,8 @@ Start new activity using this code:
 		Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse("cz.destil.gpsaveraging.AVERAGED_LOCATION"));
 		startActivityForResult(intent, 0);
 	} catch (ActivityNotFoundException e) {
-		//GPS Averaging is not installed, you can redirect user to Market like this:
-		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=org.destil.gpsaveraging"));
+		//GPS Averaging is not installed, you can redirect user to Play like this:
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=org.destil.gpsaveraging"));
 		startActivity(intent);
 	}
 In your activity override function onActivityResult for receiving data:
@@ -41,3 +41,4 @@ In your activity override function onActivityResult for receiving data:
 		{
 			//handle cancel
 		}
+	}
