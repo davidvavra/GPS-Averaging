@@ -3,7 +3,7 @@
 	<!-- Layout -->
 	<string name="remove_ads">Bez reklam &amp; více</string>
 	<string name="current_coordinates">Aktuální souřadnice: </string>
-	<string name="waiting_for_gps">Čekám na GPS …</string>
+	<string name="waiting_for_gps">Čekám na GPS...</string>
 	<string name="share_by_email">Sdílet e-mailem</string>
 	<string name="export">Do souboru</string>
 	<string name="you_dont_have_gps_enabled">GPS není povolena</string>
@@ -20,6 +20,9 @@
 	<string formatted="true" name="measurements">%1$s měření</string>
 	<string formatted="true" name="satellites_info">%1$s viditelných satelitů</string>
 	<string name="start_averaging_first">Nejdřív zapněte průměrování</string>
+	<string name="averaging_running">Probíhá průměrování GPS</string>
+	<string name="tap_to_control_it">Tapněte pro zastavení</string>
+	<string name="show_on_map">Ukázat na mapě</string>
 	<!-- Email -->
 	<string name="email_subject">Vaše zprůměrovaná poloha</string>
 	<string name="average_coordinates">Zprůměrovaná poloha:</string>

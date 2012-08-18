@@ -21,13 +21,16 @@
     <string name="measurements" formatted="true">%1$s measurements</string>
     <string name="satellites_info" formatted="true">%1$s satellites visible</string>
     <string name="start_averaging_first">Start averaging first</string>
+    <string name="averaging_running">GPS Averaging in progress</string>
+    <string name="tap_to_control_it">Tap to control it</string>
+    <string name="show_on_map">Show on Map</string>
 
     <!-- Email -->
     <string name="email_subject">Your averaged location</string>
     <string name="average_coordinates">Averaged location:</string>
     <string name="google_maps_link">Google Maps link:</string>
     <string name="average_altitude">Averaged altitude:</string>
-    <string name="email_footer">This coordinates were measured by Android app "GPS Averaging" created by Destil</string>
+    <string name="email_footer">These coordinates were measured by Android app "GPS Averaging" created by Destil</string>
 
     <!-- Settings -->
     <string name="settings">Settings</string>

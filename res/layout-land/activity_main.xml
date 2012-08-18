@@ -39,13 +39,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:baselineAligned="false"
             android:gravity="center"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="@dimen/padding_small" >
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:orientation="vertical" >
 
@@ -77,9 +79,9 @@
 
             <LinearLayout
                 android:id="@+id/avg_ui"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_large"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:orientation="vertical" >
 
@@ -109,24 +111,32 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/padding_small"
                     android:textSize="@dimen/font_large" />
-
-                <TextView
-                    android:id="@+id/no_of_measurements"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/padding_small"
-                    android:textSize="@dimen/font_large" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/start_stop"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/padding_large"
-        android:text="@string/start_averaging" />
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/no_of_measurements"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_small"
+            android:textSize="@dimen/font_large" />
+
+        <Button
+            android:id="@+id/start_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/padding_large"
+            android:text="@string/start_averaging" />
+    </LinearLayout>
 
     <com.google.ads.AdView
         android:id="@+id/adView"

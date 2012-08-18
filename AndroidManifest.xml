@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.destil.gpsaveraging"
-    android:versionCode="20"
-    android:versionName="2.0" >
+    android:versionCode="21"
+    android:versionName="2.1" >
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -20,27 +20,29 @@
         android:smallScreens="true" />
 
     <application
+        android:name=".GpsAveraging"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name=".GpsAveraging" >
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>        
-				<action android:name="menion.android.locus.GET_POINT" />       
-				<category android:name="android.intent.category.DEFAULT" />				             
-			</intent-filter>
-			<intent-filter>        
-				<action android:name="cz.destil.gpsaveraging.AVERAGED_LOCATION" />       
-				<category android:name="android.intent.category.DEFAULT" />				             
-			</intent-filter>
+            <intent-filter>
+                <action android:name="menion.android.locus.GET_POINT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="cz.destil.gpsaveraging.AVERAGED_LOCATION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.google.ads.AdActivity"
@@ -52,9 +54,12 @@
             android:name=".AboutActivity"
             android:label="@string/about" />
 
+        <service
+            android:name=".AveragingService"
+            exported="false" />
         <service android:name="net.robotmedia.billing.BillingService" />
 
-        <receiver android:name="net.robotmedia.billing.BillingReceiver">
+        <receiver android:name="net.robotmedia.billing.BillingReceiver" >
             <intent-filter>
                 <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
                 <action android:name="com.android.vending.billing.RESPONSE_CODE" />

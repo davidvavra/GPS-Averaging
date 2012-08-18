@@ -29,8 +29,8 @@ import android.location.Location;
  */
 public class Measurements {
 
+	private static volatile Measurements instance = null;
 	private final List<Location> locations;
-
 	private double averageLat;
 	private double averageLon;
 	private double averageAlt;
@@ -42,9 +42,19 @@ public class Measurements {
 	private float distanceFromAverageCoordsSum;
 
 	/** Creates a new list. */
-	public Measurements() {
+	private Measurements() {
 		this.locations = new ArrayList<Location>();
 		clean();
+	}
+
+	/**
+	 * Singleton
+	 */
+	public static Measurements getInstance() {
+		if (instance == null) {
+			instance = new Measurements();
+		}
+		return instance;
 	}
 
 	/**
@@ -88,15 +98,7 @@ public class Measurements {
 		// calculating accuracy improved by averaging
 		double distance = distance(location.getLatitude(), location.getLongitude(), averageLat, averageLon);
 		if (distance == 0) {
-			distance = (location.getAccuracy() == 0 ? 5 : location.getAccuracy());
-		}
-		if (locations.size() > 1) {
-			// same locations next to each other doesn't improve accuracy
-			double previousLat = locations.get(locations.size() - 2).getLatitude();
-			double previousLon = locations.get(locations.size() - 2).getLongitude();
-			if (location.getLatitude() == previousLat && location.getLongitude() == previousLon) {
-				distance = location.getAccuracy();
-			}
+			distance = (location.getAccuracy() == 0 ? 2 : location.getAccuracy());
 		}
 		distanceFromAverageCoordsSum += distance;
 		averageAccuracy = distanceFromAverageCoordsSum / size();

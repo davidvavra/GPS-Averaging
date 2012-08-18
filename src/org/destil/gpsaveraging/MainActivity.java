@@ -15,16 +15,15 @@
  */
 package org.destil.gpsaveraging;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import net.robotmedia.billing.BillingController;
 import net.robotmedia.billing.BillingRequest.ResponseCode;
 import net.robotmedia.billing.helper.AbstractBillingObserver;
 import net.robotmedia.billing.model.Transaction.PurchaseState;
 import android.app.AlertDialog.Builder;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
@@ -33,7 +32,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -50,16 +51,13 @@ import com.google.ads.AdView;
 
 public class MainActivity extends SherlockActivity implements LocationListener, OnClickListener, Listener {
 
-	private static final String GPS = "gps"; // type of location
-	private static final int MEASUREMENT_DELAY = 2000; // delay between
-														// measurements
+	protected static final String GPS = "gps"; // type of location
 	private static final String BILLING_ITEMID = "cz.destil.gpsaveraging.full";
 	public static boolean isFullVersion = false;
 
+	MainActivity c = this; // context
 	private LocationManager locationManager;
 	private Exporter exporter;
-	private boolean averaging = false;
-	private Timer timer;
 	private Measurements measurements;
 	private AbstractBillingObserver billingObserver;
 	// UI elements
@@ -84,7 +82,7 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 		setContentView(R.layout.activity_main);
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		exporter = new Exporter(this);
-		measurements = new Measurements();
+		measurements = Measurements.getInstance();
 		// elements from XML
 		uiGpsOff = (LinearLayout) findViewById(R.id.gps_off);
 		uiGpsOn = (ScrollView) findViewById(R.id.gps_on);
@@ -102,6 +100,9 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 		uiAd = (AdView) this.findViewById(R.id.adView);
 		uiStartStop.setOnClickListener(this);
 		initBilling();
+		// listen for updates from service
+		LocalBroadcastManager.getInstance(this).registerReceiver(averagingReceiver,
+				new IntentFilter(AveragingService.INTENT_ACTION));
 	}
 
 	@Override
@@ -110,7 +111,7 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 		locationManager.requestLocationUpdates(GPS, 0, 0, this);
 		locationManager.addGpsStatusListener(this);
 		if (locationManager.isProviderEnabled(GPS)) {
-			onProviderEnabled(GPS);
+			init();
 		} else {
 			onProviderDisabled(GPS);
 		}
@@ -120,12 +121,12 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 		super.onStop();
 		locationManager.removeUpdates(this);
 		locationManager.removeGpsStatusListener(this);
-		stopAveraging();
 	}
 
 	@Override
 	protected void onDestroy() {
 		BillingController.unregisterObserver(billingObserver);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(averagingReceiver);
 		super.onDestroy();
 	}
 
@@ -147,6 +148,9 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 		switch (item.getItemId()) {
 		case R.id.menu_email:
 			shareViaEmail();
+			break;
+		case R.id.menu_map:
+			showOnMap();
 			break;
 		case R.id.menu_export:
 			if (isFullVersion) {
@@ -170,9 +174,9 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 
 	@Override
 	public void onLocationChanged(Location location) {
-		uiCurrLatLon.setText(exporter.formatLatLon(location));
-		uiCurrAcc.setText(exporter.formatAccuracy(location));
-		uiCurrAlt.setText(exporter.formatAltitude(location));
+		uiCurrLatLon.setText(Exporter.formatLatLon(location, c));
+		uiCurrAcc.setText(Exporter.formatAccuracy(location, c));
+		uiCurrAlt.setText(Exporter.formatAltitude(location, c));
 	}
 
 	@Override
@@ -182,13 +186,13 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		showError(R.string.waiting_for_gps);
+		init();
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		if (status == LocationProvider.AVAILABLE) {
-			showMainUi();
+			DisplayCoordsNoAveraging();
 		} else {
 			showError(R.string.gps_not_available);
 		}
@@ -198,7 +202,7 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 	@Override
 	public void onGpsStatusChanged(int status) {
 		if (status == GpsStatus.GPS_EVENT_FIRST_FIX) {
-			showMainUi();
+			DisplayCoordsNoAveraging();
 		} else if (status == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
 			GpsStatus gpsStatus = locationManager.getGpsStatus(null);
 			int all = 0;
@@ -215,17 +219,28 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 	@Override
 	public void onClick(View v) {
 		// start/stop button click
-		if (averaging) {
+		if (AveragingService.isRunning) {
 			stopAveraging();
 		} else {
 			startAveraging();
 		}
 	}
 
-	public static Intent getIntent(Context context) {
-		Intent intent = new Intent(context, MainActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		return intent;
+	/**
+	 * Sets UI after onCreate.
+	 */
+	private void init() {
+		// first start
+		if (!AveragingService.isRunning) {
+			showError(R.string.waiting_for_gps);
+			uiStartStop.setText(R.string.start_averaging);
+		} else {
+			uiGpsOn.setVisibility(View.VISIBLE);
+			uiGpsOff.setVisibility(View.GONE);
+			uiAveraging.setVisibility(View.VISIBLE);
+			uiStartStop.setEnabled(true);
+			uiStartStop.setText(R.string.stop_averaging);
+		}
 	}
 
 	/**
@@ -247,7 +262,7 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 	/**
 	 * Hides error screen and shows main UI.
 	 */
-	private void showMainUi() {
+	private void DisplayCoordsNoAveraging() {
 		if (uiGpsOn.getVisibility() != View.VISIBLE) {
 			uiGpsOn.setVisibility(View.VISIBLE);
 			uiGpsOff.setVisibility(View.GONE);
@@ -269,15 +284,21 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 	/**
 	 * Starts measuring.
 	 */
+	private void startAveraging() {
+		uiStartStop.setText(R.string.stop_averaging);
+		uiAveraging.setVisibility(View.VISIBLE);
+		// start service
+		startService(new Intent(this, AveragingService.class));
+	}
+
+	/**
+	 * Starts measuring.
+	 */
 	private void stopAveraging() {
-		averaging = false;
+		AveragingService.isRunning = false;
 		uiStartStop.setText(R.string.new_averaging);
-		if (timer != null) {
-			timer.cancel();
-		}
 		// Intent API & Locus integration
-		if (measurements != null
-				&& measurements.size() > 0
+		if (measurements.size() > 0
 				&& getIntent().getAction() != null
 				&& (getIntent().getAction().equals("menion.android.locus.GET_POINT") || getIntent().getAction().equals(
 						"cz.destil.gpsaveraging.AVERAGED_LOCATION"))) {
@@ -290,35 +311,7 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 			setResult(RESULT_OK, intent);
 			finish();
 		}
-	}
-
-	/**
-	 * Starts measuring.
-	 */
-	private void startAveraging() {
-		averaging = true;
-		uiStartStop.setText(R.string.stop_averaging);
-		measurements.clean();
-		uiAveraging.setVisibility(View.VISIBLE);
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-
-			@Override
-			public void run() {
-				measurements.add(locationManager.getLastKnownLocation(GPS));
-				runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						Location averagedLocation = measurements.getAveragedLocation();
-						uiAvgLatLon.setText(exporter.formatLatLon(averagedLocation));
-						uiAvgAcc.setText(exporter.formatAccuracy(averagedLocation));
-						uiAvgAlt.setText(exporter.formatAltitude(averagedLocation));
-						uiNoOfMeasurements.setText(getString(R.string.measurements, measurements.size()));
-					}
-				});
-			}
-		}, 0, MEASUREMENT_DELAY);
+		stopService(new Intent(this, AveragingService.class));
 	}
 
 	/**
@@ -335,7 +328,7 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 	 * Exports averaged location via e-mail.
 	 */
 	private void shareViaEmail() {
-		if (measurements.size() == 0) {
+		if (!isExportPossible()) {
 			Toast.makeText(this, R.string.start_averaging_first, Toast.LENGTH_LONG).show();
 		} else {
 			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -343,6 +336,20 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
 			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, exporter.toEmailText(measurements));
 			startActivity(shareIntent);
+		}
+	}
+
+	/**
+	 * Shows coordinates on built-in map.
+	 */
+	private void showOnMap() {
+		if (!isExportPossible()) {
+			Toast.makeText(this, R.string.start_averaging_first, Toast.LENGTH_LONG).show();
+		} else {
+			final StringBuilder uri = new StringBuilder("geo:");
+			uri.append(measurements.getLatitude()).append(',').append(measurements.getLongitude());
+			final Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+			startActivity(intent);
 		}
 	}
 
@@ -404,5 +411,22 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 			return false;
 		}
 	}
+
+	private boolean isExportPossible() {
+		return measurements.size() > 0;
+	}
+
+	private BroadcastReceiver averagingReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// new data from the service
+			Location location = (Location) intent.getParcelableExtra(AveragingService.EXTRA_LOCATION);
+			uiAvgLatLon.setText(Exporter.formatLatLon(location, c));
+			uiAvgAcc.setText(Exporter.formatAccuracy(location, c));
+			uiAvgAlt.setText(Exporter.formatAltitude(location, c));
+			uiNoOfMeasurements.setText(getString(R.string.measurements, measurements.size()));
+		}
+	};
 
 }

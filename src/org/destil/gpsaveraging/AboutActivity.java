@@ -58,7 +58,7 @@ public class AboutActivity extends SherlockActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
-			startActivity(MainActivity.getIntent(this));
+			startActivity(new Intent(this, MainActivity.class));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

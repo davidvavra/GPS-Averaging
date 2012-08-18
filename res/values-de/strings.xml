@@ -3,7 +3,7 @@
 	<!-- Layout -->
 	<string name="remove_ads">Werbung entfernen &amp; mehr</string>
 	<string name="current_coordinates">Aktuelle Koordinaten:</string>
-	<string name="waiting_for_gps">Warte auf GPS...</string>
+	<string name="waiting_for_gps">Warte auf GPS …</string>
 	<string name="share_by_email">Per E-Mail teilen</string>
 	<string name="export">Dateiexport</string>
 	<string name="you_dont_have_gps_enabled">GPS ist nicht aktiviert</string>
@@ -20,6 +20,9 @@
 	<string formatted="true" name="measurements">%1$s Messungen</string>
 	<string formatted="true" name="satellites_info">%1$s Satelliten sichtbar</string>
 	<string name="start_averaging_first">Zuerst Mittelung starten</string>
+	<string name="averaging_running">GPS Averaging in progress</string>
+	<string name="tap_to_control_it">Tap to control it</string>
+	<string name="show_on_map">Show on Map</string>
 	<!-- Email -->
 	<string name="email_subject">Deine gemittelte Position</string>
 	<string name="average_coordinates">Gemittelte Position:</string>

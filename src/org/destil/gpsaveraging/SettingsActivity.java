@@ -16,6 +16,7 @@
 package org.destil.gpsaveraging;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -96,7 +97,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
-			startActivity(MainActivity.getIntent(this));
+			startActivity(new Intent(this, MainActivity.class));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
