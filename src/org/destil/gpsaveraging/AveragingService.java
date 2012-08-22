@@ -39,7 +39,7 @@ public class AveragingService extends Service implements LocationListener {
 		// no binding
 		return null;
 	}
-	
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// start averaging
@@ -48,10 +48,12 @@ public class AveragingService extends Service implements LocationListener {
 		locationManager.requestLocationUpdates(MainActivity.GPS, 0, 0, this);
 		return START_STICKY;
 	}
-	
+
 	@Override
 	public void onDestroy() {
-		timer.cancel();
+		if (timer != null) {
+			timer.cancel();
+		}
 		stopForeground(true);
 		locationManager.removeUpdates(this);
 		super.onDestroy();
@@ -71,13 +73,15 @@ public class AveragingService extends Service implements LocationListener {
 
 			@Override
 			public void run() {
-				measurements.add(locationManager.getLastKnownLocation("gps"));
-				intent.putExtra(EXTRA_LOCATION, measurements.getAveragedLocation());
-				broadcastManager.sendBroadcast(intent);
+				Location location = locationManager.getLastKnownLocation("gps");
+				if (location != null) {
+					measurements.add(locationManager.getLastKnownLocation("gps"));
+					intent.putExtra(EXTRA_LOCATION, measurements.getAveragedLocation());
+					broadcastManager.sendBroadcast(intent);
+				}
 			}
 		}, 0, MEASUREMENT_DELAY);
 	}
-
 
 	/**
 	 * Shows notification and launches ONGOING mode.

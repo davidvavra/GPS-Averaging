@@ -10,9 +10,9 @@
 	<string name="gps_not_available">GPS nedostupná</string>
 	<string name="altitude">Výška: </string>
 	<string name="feet">ft</string>
-	<string name="stop_averaging">Zastavit měření</string>
-	<string name="start_averaging">Spustit měření</string>
-	<string name="new_averaging">Nové měření</string>
+	<string name="stop_averaging">Zastavit průměrování</string>
+	<string name="start_averaging">Spustit průměrování</string>
+	<string name="new_averaging">Nové průměrování</string>
 	<string name="ok">OK</string>
 	<string formatted="true" name="average_location_exported_to_files">Průměrná poloha byla exportována do složky \"%1$s\" a souborů:\nGPX: %2$s\nKML: %3$s</string>
 	<string formatted="true" name="application_cant_write_file">Aplikace nemůže zapisovat do souboru, protože: %1$s</string>

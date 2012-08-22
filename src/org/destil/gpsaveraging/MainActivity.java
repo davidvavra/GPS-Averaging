@@ -20,6 +20,7 @@ import net.robotmedia.billing.BillingRequest.ResponseCode;
 import net.robotmedia.billing.helper.AbstractBillingObserver;
 import net.robotmedia.billing.model.Transaction.PurchaseState;
 import android.app.AlertDialog.Builder;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -153,11 +154,7 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 			showOnMap();
 			break;
 		case R.id.menu_export:
-			if (isFullVersion) {
-				showAlert(exporter.toGpxAndKmlFiles(measurements));
-			} else {
-				BillingController.requestPurchase(this, BILLING_ITEMID);
-			}
+			showAlert(exporter.toGpxAndKmlFiles(measurements));
 			break;
 		case R.id.menu_remove_ads:
 			BillingController.requestPurchase(this, BILLING_ITEMID);
@@ -174,6 +171,7 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 
 	@Override
 	public void onLocationChanged(Location location) {
+		DisplayCoordsNoAveraging();
 		uiCurrLatLon.setText(Exporter.formatLatLon(location, c));
 		uiCurrAcc.setText(Exporter.formatAccuracy(location, c));
 		uiCurrAlt.setText(Exporter.formatAltitude(location, c));
@@ -346,10 +344,14 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 		if (!isExportPossible()) {
 			Toast.makeText(this, R.string.start_averaging_first, Toast.LENGTH_LONG).show();
 		} else {
-			final StringBuilder uri = new StringBuilder("geo:");
-			uri.append(measurements.getLatitude()).append(',').append(measurements.getLongitude());
-			final Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri.toString()));
-			startActivity(intent);
+			try {
+				final StringBuilder uri = new StringBuilder("geo:");
+				uri.append(measurements.getLatitude()).append(',').append(measurements.getLongitude());
+				final Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+				startActivity(intent);
+			} catch (ActivityNotFoundException e) {
+				// ignore
+			}
 		}
 	}
 
@@ -413,7 +415,7 @@ public class MainActivity extends SherlockActivity implements LocationListener, 
 	}
 
 	private boolean isExportPossible() {
-		return measurements.size() > 0;
+		return uiAveraging.getVisibility() == View.VISIBLE;
 	}
 
 	private BroadcastReceiver averagingReceiver = new BroadcastReceiver() {

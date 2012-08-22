@@ -20,9 +20,9 @@
 	<string formatted="true" name="measurements">%1$s Messungen</string>
 	<string formatted="true" name="satellites_info">%1$s Satelliten sichtbar</string>
 	<string name="start_averaging_first">Zuerst Mittelung starten</string>
-	<string name="averaging_running">GPS Averaging in progress</string>
-	<string name="tap_to_control_it">Tap to control it</string>
-	<string name="show_on_map">Show on Map</string>
+	<string name="averaging_running">GPS Averaging arbeitet</string>
+	<string name="tap_to_control_it">Zum Steuern antippen</string>
+	<string name="show_on_map">Auf Karte zeigen</string>
 	<!-- Email -->
 	<string name="email_subject">Deine gemittelte Position</string>
 	<string name="average_coordinates">Gemittelte Position:</string>
