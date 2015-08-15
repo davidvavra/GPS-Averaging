@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="admob_ad_id" tools:translatable="false">ca-app-pub-1216360424749462/5511519440</string>
+    <string name="google_play_license_key" tools:translatable="false">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAI7VpOWr5kaWDxvyi3Vb7R9NjfCfsE76GdWt8z/pq0yuGJjT/DMpWLU8xwy4CYhEkCEpzJsEtpUW5dFgyCzCjSl8uucgOQ75JnhUEB7bQYbmUNLAQDcC6D7IERS29pdHzJksirK/psY9bFSJc6wy1thFAMi3m3HamhtWN7vH+WVvTCb6RL2QLLcu5VMs1rnHQ3/CidLaU4saCMI6AAivfEZqJJa1BUm+sI/w2BeWIC3c430b2nBnpEFePCd7KDXXkVpvdfUhNaA9S2OmJVf60sBsM2++/s+W8YB+PmTP1sgzUsqg4WXH8mD+yz1Gqh7MLqj8t7cx+Ra2Y/6NrqIkwIDAQAB</string>
+    <string name="google_play_product_id" tools:translatable="false">cz.destil.gpsaveraging.full</string>
+</resources>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Static language-independent strings -->
-    <string name="app_name">GPS Averaging</string>
-    <string name="heart">♥</string>
-    <string name="author_name">David \'Destil\' Vávra</string>
-</resources>

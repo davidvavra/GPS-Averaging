@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Static language-independent strings -->
+    <string name="app_name" tools:translatable="false">GPS Averaging</string>
+    <string name="heart" tools:translatable="false">♥</string>
+    <string name="author_name" tools:translatable="false">David \'Destil\' Vávra</string>
+</resources>
