@@ -23,6 +23,7 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
     private static GpsObserver sInstance;
 
     private LocationManager locationManager;
+
     private boolean hasFix = false;
 
     private GpsObserver() {
@@ -47,8 +48,10 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
     public void stop() {
         locationManager.removeUpdates(this);
         locationManager.removeGpsStatusListener(this);
-        locationManager = null;
-        hasFix = false;
+    }
+
+    public boolean hasFix() {
+        return hasFix;
     }
 
     @Override
@@ -102,5 +105,12 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
     public void onProviderDisabled(String provider) {
         hasFix = false;
         App.bus().post(new GpsNotAvailableEvent());
+    }
+
+    public Location getLastLocation() {
+        if (locationManager != null) {
+            return locationManager.getLastKnownLocation("gps");
+        }
+        return null;
     }
 }

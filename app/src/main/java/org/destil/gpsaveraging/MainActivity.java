@@ -71,17 +71,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        showEmpty();
-        vProgress.setVisibility(View.VISIBLE);
-        vStatus.setText(R.string.waiting_for_gps);
-        vSatellites.setVisibility(View.VISIBLE);
-        GpsObserver.getInstance().start();
-        if (AveragingService.isRunning()) {
-            vAverageLocation.setVisibility(View.VISIBLE);
+        if (GpsObserver.getInstance().hasFix()) {
+            showCurrentLocation();
         } else {
-            vAverageLocation.setVisibility(View.GONE);
+            showWaitingForGps();
         }
         changeFab();
+        GpsObserver.getInstance().start();
     }
 
     @Override
@@ -96,28 +92,11 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.fix:
-                // todo: remove
-                App.bus().post(new FirstFixEvent());
-                App.bus().post(new CurrentLocationEvent(new Location("gps")));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Subscribe
     public void onFirstFix(FirstFixEvent e) {
         if (vCards.getVisibility() == View.GONE) {
             vEmpty.setVisibility(View.GONE);
+            vAverageLocation.setVisibility(View.GONE);
             Animations.showFromTop(vCards);
             Animations.showFromTop(vFab);
         }
@@ -154,6 +133,41 @@ public class MainActivity extends AppCompatActivity {
             startAveraging();
         }
         changeFab();
+    }
+
+    /**
+     * Restores state after rotation.
+     */
+    private void showCurrentLocation() {
+        vEmpty.setVisibility(View.GONE);
+        vCards.setVisibility(View.VISIBLE);
+        vFab.setVisibility(View.VISIBLE);
+        vCurrentLocation.updateLocation(GpsObserver.getInstance().getLastLocation());
+        boolean hasMeasurements = Measurements.getInstance().size() > 0;
+        if (!hasMeasurements || AveragingService.isRunning()) {
+            vCurrentLocation.setVisibility(View.VISIBLE);
+        } else {
+            vCurrentLocation.setVisibility(View.GONE);
+        }
+        vAverageLocation.updateLocation(Measurements.getInstance().getAveragedLocation());
+        if (AveragingService.isRunning()) {
+            vAverageLocation.setVisibility(View.VISIBLE);
+            vAverageLocation.getActionsView().setVisibility(View.GONE);
+        } else {
+            if (hasMeasurements) {
+                vAverageLocation.setVisibility(View.VISIBLE);
+                vAverageLocation.getActionsView().setVisibility(View.VISIBLE);
+            } else {
+                vAverageLocation.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void showWaitingForGps() {
+        showEmpty();
+        vProgress.setVisibility(View.VISIBLE);
+        vStatus.setText(R.string.waiting_for_gps);
+        vSatellites.setVisibility(View.VISIBLE);
     }
 
     private void startAveraging() {
