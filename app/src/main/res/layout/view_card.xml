@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="24dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="24dp">
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/current_coordinates"
+            android:textSize="24sp"
+            tools:text="Current location:" />
+
+        <TextView
+            android:id="@+id/card_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.1"
+            android:paddingTop="8dp"
+            android:textSize="18sp"
+            tools:text="N 49 54.625\nE 14 13.415\n+-10m\nAltitude: 277.5m" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="8dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1f000000" />
+
+        <TextView
+            style="@style/CardButton"
+            android:layout_marginTop="8dp"
+            android:text="@string/share" />
+
+        <TextView
+            style="@style/CardButton"
+            android:text="@string/show_on_map" />
+
+        <TextView
+            style="@style/CardButton"
+            android:text="@string/export_to_gpx" />
+
+        <TextView
+            style="@style/CardButton"
+            android:text="@string/export_to_kml" />
+    </LinearLayout>
+</LinearLayout>

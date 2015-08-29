@@ -19,22 +19,34 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
+import com.squareup.otto.Bus;
+
+import org.destil.gpsaveraging.util.MainThreadBus;
 
 import io.fabric.sdk.android.Fabric;
 
-public class GpsAveraging extends Application {
+public class App extends Application {
 
-    private static GpsAveraging sInstance;
+    private static App sInstance;
+
+    private static Bus sBus;
 
     @NonNull
-    public static GpsAveraging get() {
+    public static App get() {
         return sInstance;
+    }
+
+    public static Bus bus() {
+        return sBus;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, new Crashlytics());
+        }
         sInstance = this;
+        sBus = new MainThreadBus();
     }
 }

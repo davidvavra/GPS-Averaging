@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package org.destil.gpsaveraging;
+package org.destil.gpsaveraging.ui;
 
 import java.util.Locale;
 
@@ -26,6 +26,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import org.destil.gpsaveraging.R;
 
 /**
  * Shows about information, support etc.
@@ -47,9 +49,9 @@ public class AboutActivity extends AppCompatActivity {
 			version = "Unknown";
 		}
 		((TextView) findViewById(R.id.version)).setText(version);
-		if (!MainActivity.isFullVersion) {
-			findViewById(R.id.thank_you).setVisibility(View.GONE);
-		}
+		//if (!OldActivity.isFullVersion) {
+		//	findViewById(R.id.thank_you).setVisibility(View.GONE);
+		//}
 	}
 
 	@Override
@@ -57,7 +59,7 @@ public class AboutActivity extends AppCompatActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
-			startActivity(new Intent(this, MainActivity.class));
+			//startActivity(new Intent(this, OldActivity.class));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

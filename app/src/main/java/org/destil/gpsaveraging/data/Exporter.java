@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package org.destil.gpsaveraging;
+package org.destil.gpsaveraging.data;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,6 +28,11 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Environment;
 
+import org.destil.gpsaveraging.App;
+import org.destil.gpsaveraging.R;
+import org.destil.gpsaveraging.ui.SettingsActivity;
+import org.destil.gpsaveraging.measure.Measurements;
+
 /** @author Libor Tvrdik (libor.tvrdik@gmail.com), Destil */
 public class Exporter {
 
@@ -35,15 +40,15 @@ public class Exporter {
 	public static final String ACCURACY_SYMBOL = "±";
 	public static final String APP_DIRECTORY = "GPSAveraging";
 	public static final String APP_LINK = "https://play.google.com/store/apps/details?id=org.destil.gpsaveraging";
+	private static Exporter sInstance;
 
-	private final Context c;
-
-	public Exporter(Context applicationContext) {
-		this.c = applicationContext;
-	}
-
-	private Context getContext() {
-		return c;
+	private Exporter() {}
+	
+	public static Exporter getInstance() {
+		if (sInstance == null) {
+			sInstance = new Exporter();
+		}
+		return sInstance;
 	}
 
 	/**
@@ -55,7 +60,7 @@ public class Exporter {
 	public String toGpxAndKmlFiles(Measurements measurements) {
 		try {
 			if (measurements.size() == 0) {
-				return c.getString(R.string.start_averaging_first);
+				return App.get().getString(R.string.start_averaging_first);
 			}
 			final Calendar now = Calendar.getInstance();
 			final File storeDirectory = new File(Environment.getExternalStorageDirectory(), APP_DIRECTORY);
@@ -65,7 +70,7 @@ public class Exporter {
 			}
 
 			if (!storeDirectory.exists()) {
-				return c.getString(R.string.cant_create_storage_directory, storeDirectory);
+				return App.get().getString(R.string.cant_create_storage_directory, storeDirectory);
 			}
 
 			final String dateFormatPattern = "%1$td-%<tm-%<tY_%<tH-%<tM-%<tS.%2$s";
@@ -82,10 +87,10 @@ public class Exporter {
 			toKMLString(measurements, kmlOut);
 			kmlOut.close();
 			// all OK
-			return c.getString(R.string.average_location_exported_to_files, storeDirectory, gpxFile.getName(),
+			return App.get().getString(R.string.average_location_exported_to_files, storeDirectory, gpxFile.getName(),
 					kmlFile.getName());
 		} catch (IOException e) {
-			return c.getString(R.string.application_cant_write_file, e.getMessage());
+			return App.get().getString(R.string.application_cant_write_file, e.getMessage());
 		}
 	}
 
@@ -103,7 +108,7 @@ public class Exporter {
 		final Formatter formatter = new Formatter(output);
 
 		output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		output.append("<gpx version=\"1.0\" creator=\"").append(getContext().getString(R.string.app_name))
+		output.append("<gpx version=\"1.0\" creator=\"").append(App.get().getString(R.string.app_name))
 				.append("\" \n");
 		output.append("    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n");
 		output.append("    xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" \n");
@@ -118,7 +123,7 @@ public class Exporter {
 					.append(SimpleDateFormat.getTimeInstance().format(measurements.getTime(0))).append(" - ")
 					.append(SimpleDateFormat.getTimeInstance().format(measurements.getTime(measurements.size() - 1)))
 					.append("</desc>\n");
-			output.append("\t<author>").append(getContext().getString(R.string.app_name)).append("</author>\n");
+			output.append("\t<author>").append(App.get().getString(R.string.app_name)).append("</author>\n");
 			output.append("\t<link>").append(APP_LINK).append("</link>\n");
 			output.append("\t<time>").append(XSD_DATETIME.format(measurements.getTime(0))).append("</time>\n\n");
 
@@ -127,7 +132,7 @@ public class Exporter {
 			output.append("\t\t<name>Final Average Coordinates</name>\n");
 			output.append("\t\t<desc>Computed as the average of the ").append(String.valueOf(measurements.size()))
 					.append(" points. Coordinates: ");
-			formatLatLonWithAccuracy(measurements.getAveragedLocation(), formatter, output, c);
+			formatLatLonWithAccuracy(measurements.getAveragedLocation(), formatter, output);
 			output.append("</desc>\n");
 			output.append("\t\t<ele>").append(String.valueOf(measurements.getAltitude())).append("</ele>\n");
 			output.append("\t</wpt>\n\n");
@@ -138,7 +143,7 @@ public class Exporter {
 						.append("\" lon=\"").append(String.valueOf(measurements.getLongitude(i))).append("\">\n");
 				output.append("\t\t\t<name>Source point #").append(String.valueOf(i + 1)).append("</name>\n");
 				output.append("\t\t\t<desc>Coordinates: ");
-				formatLatLonWithAccuracy(measurements.getLocation(i), formatter, output, c);
+				formatLatLonWithAccuracy(measurements.getLocation(i), formatter, output);
 				output.append("</desc>\n");
 				// gpx.append("\t\t\t<sat> xsd:nonNegativeInteger </sat>\n");
 				output.append("\t\t\t<time>").append(XSD_DATETIME.format(measurements.getTime(i))).append("</time>\n");
@@ -169,7 +174,7 @@ public class Exporter {
 		output.append("<Document>\n\n");
 
 		output.append("\t<name>Average Coordinates</name>\n");
-		output.append("\t<atom:author><atom:name>").append(getContext().getString(R.string.app_name))
+		output.append("\t<atom:author><atom:name>").append(App.get().getString(R.string.app_name))
 				.append("</atom:name></atom:author>\n");
 		output.append("\t<atom:link href=\"").append(APP_LINK).append("\" />\n");
 
@@ -220,7 +225,7 @@ public class Exporter {
 			output.append("\t\t\t<name>Final Average Coordinates</name>\n");
 			output.append("\t\t\t<description>Computed as the average of the ")
 					.append(String.valueOf(measurements.size())).append(" points. Coordinates: ");
-			formatLatLonWithAccuracy(measurements.getAveragedLocation(), formatter, output, c);
+			formatLatLonWithAccuracy(measurements.getAveragedLocation(), formatter, output);
 			output.append("</description>\n");
 			output.append("\t\t\t<styleUrl>#finalAvgPoint</styleUrl>\n");
 			output.append("\t\t\t<Point>\n");
@@ -237,7 +242,7 @@ public class Exporter {
 				output.append("\t\t<Placemark>\n");
 				output.append("\t\t\t<name>Source point #").append(String.valueOf(i + 1)).append("</name>\n");
 				output.append("\t\t\t<description>Coordinates: ");
-				formatLatLonWithAccuracy(measurements.getLocation(i), formatter, output, c);
+				formatLatLonWithAccuracy(measurements.getLocation(i), formatter, output);
 				output.append("</description>\n");
 				output.append("\t\t\t<styleUrl>#partPoint</styleUrl>\n");
 				output.append("\t\t\t<Point>\n");
@@ -265,33 +270,33 @@ public class Exporter {
 		final StringBuilder output = new StringBuilder();
 		final Formatter formatter = new Formatter(output);
 
-		output.append(getContext().getString(R.string.average_coordinates)).append("\n");
-		formatLatLonWithAccuracy(measurements.getAveragedLocation(), formatter, output, c);
+		output.append(App.get().getString(R.string.average_coordinates)).append("\n");
+		formatLatLonWithAccuracy(measurements.getAveragedLocation(), formatter, output);
 		output.append("\n\n");
 
-		output.append(getContext().getString(R.string.google_maps_link)).append("\n");
+		output.append(App.get().getString(R.string.google_maps_link)).append("\n");
 		output.append("https://maps.google.com/?q=");
 		formatter.format(Locale.US, "%.5f,%.5f", measurements.getLatitude(), measurements.getLongitude());
 		output.append("\n\n");
 
-		output.append(getContext().getString(R.string.average_altitude)).append("\n");
-		formatLength(measurements.getAltitude(), formatter, c);
+		output.append(App.get().getString(R.string.average_altitude)).append("\n");
+		formatLength(measurements.getAltitude(), formatter);
 		output.append("\n\n");
 
-		output.append(getContext().getString(R.string.email_footer)).append("\n");
+		output.append(App.get().getString(R.string.email_footer)).append("\n");
 		output.append(APP_LINK).append("\n");
 
 		return output.toString();
 	}
 
 	/** Coordinate format to a readable format (degrees - DDD MM.MMM) */
-	public static String formatLatLon(Location location, Context c) {
+	public static String formatLatLon(Location location) {
 
 		final StringBuilder output = new StringBuilder();
 		final Formatter formatter = new Formatter(output);
 
 		try {
-			formatLatLon(location, formatter, output, c);
+			formatLatLon(location, formatter, output);
 		} catch (IOException ex) {
 			// IOException on StringBuilder is impossible
 			throw new IllegalStateException(ex);
@@ -301,20 +306,19 @@ public class Exporter {
 	}
 
 	/** Coordinate format to a readable format (degrees - DDD MM.MMM) */
-	private static Appendable formatLatLon(Location location, Formatter formatter, Appendable output, Context c)
+	private static Appendable formatLatLon(Location location, Formatter formatter, Appendable output)
 			throws IOException {
-		formatCoordinate(location.getLatitude(), true, formatter, output, c);
+		formatCoordinate(location.getLatitude(), true, formatter, output);
 		output.append("\n");
-		formatCoordinate(location.getLongitude(), false, formatter, output, c);
+		formatCoordinate(location.getLongitude(), false, formatter, output);
 		return output;
 	}
 
 	/**
 	 * Formats single lat/lon coordinate according to format in settings.
 	 */
-	private static Appendable formatCoordinate(double coordinate, boolean lat, Formatter formatter, Appendable output,
-			Context c) throws IOException {
-		String format = SettingsActivity.getCoordinateFormat(c);
+	private static Appendable formatCoordinate(double coordinate, boolean lat, Formatter formatter, Appendable output) throws IOException {
+		String format = SettingsActivity.getCoordinateFormat();
 		if (format.equals(SettingsActivity.COORDS_DECIMAL)) {
 			formatter.format("%.5f", coordinate);
 		} else {
@@ -344,22 +348,21 @@ public class Exporter {
 	/**
 	 * Coordinate format to a readable format (degrees - DDD MM.MMM) accuracy.
 	 */
-	public static String formatLatLonWithAccuracy(Location location, Context c) {
+	public static String formatLatLonWithAccuracy(Location location) {
 		final StringBuilder output = new StringBuilder();
 		final Formatter formatter = new Formatter(output);
-		formatLatLonWithAccuracy(location, formatter, output, c);
+		formatLatLonWithAccuracy(location, formatter, output);
 		return output.toString();
 	}
 
 	/**
 	 * Coordinate format to a readable format (degrees - DDD MM.MMM) accuracy.
 	 */
-	public static Appendable formatLatLonWithAccuracy(Location location, Formatter formatter, Appendable output,
-			Context c) {
+	public static Appendable formatLatLonWithAccuracy(Location location, Formatter formatter, Appendable output) {
 		try {
-			formatLatLon(location, formatter, output, c);
+			formatLatLon(location, formatter, output);
 			output.append("\n");
-			formatAccuracy(location, formatter, output, c);
+			formatAccuracy(location, formatter, output);
 			return output;
 		} catch (IOException e) {
 			return null;
@@ -367,11 +370,11 @@ public class Exporter {
 	}
 
 	/** Format accuracy in meter and feet. */
-	public static String formatAccuracy(Location location, Context c) {
+	public static String formatAccuracy(Location location) {
 		final StringBuilder output = new StringBuilder();
 		final Formatter formatter = new Formatter(output);
 		try {
-			formatAccuracy(location, formatter, output, c);
+			formatAccuracy(location, formatter, output);
 		} catch (IOException ex) {
 			// IOException on StringBuilder is impossible
 			throw new IllegalStateException(ex);
@@ -381,36 +384,33 @@ public class Exporter {
 	}
 
 	/** Format accuracy in meter and feet. */
-	public static Appendable formatAccuracy(Location location, Formatter formatter, Appendable output, Context c)
+	public static Appendable formatAccuracy(Location location, Formatter formatter, Appendable output)
 			throws IOException {
 		output.append(ACCURACY_SYMBOL);
-		formatLength(location.getAccuracy(), formatter, c);
+		formatLength(location.getAccuracy(), formatter);
 		return output;
 	}
 
 	/** Formats length for output in meter and feet. */
-	public static void formatLength(double length, Formatter formatter, Context c) {
-		if (SettingsActivity.getUnitsFormat(c).equals(SettingsActivity.UNITS_METRIC)) {
+	public static void formatLength(double length, Formatter formatter) {
+		if (SettingsActivity.getUnitsFormat().equals(SettingsActivity.UNITS_METRIC)) {
 			formatter.format(" %,.1f m", length);
 		} else {
 			// imperial units
-			formatter.format(" %,.1f %s", length * 3.28132739, c.getString(R.string.feet));
+			formatter.format(" %,.1f %s", length * 3.28132739, App.get().getString(R.string.feet));
 		}
 	}
 
 	/**
 	 * Formats height to view the users.
-	 * 
-	 * @param altitude
-	 *            in meter
 	 */
-	public static String formatAltitude(Location location, Context c) {
+	public static String formatAltitude(Location location) {
 
 		final StringBuilder alt = new StringBuilder();
 		final Formatter formatter = new Formatter(alt);
 
-		alt.append(c.getString(R.string.altitude));
-		formatLength(location.getAltitude(), formatter, c);
+		alt.append(App.get().getString(R.string.altitude));
+		formatLength(location.getAltitude(), formatter);
 
 		return alt.toString();
 	}

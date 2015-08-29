@@ -1,139 +1,90 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/gps_off"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/android:progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/gps_off_text"
+            android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_large" />
+            android:layout_marginTop="16dp"
+            android:textSize="24sp"
+            tools:text="@string/waiting_for_gps" />
 
         <TextView
             android:id="@+id/satellites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:textColor="#C0C0C0"
-            android:textSize="@dimen/font_small" />
+            android:layout_marginTop="16dp"
+            android:textSize="14sp"
+            tools:text="9 satellites visible" />
+
     </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/gps_on"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/cards"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="@dimen/padding_small" >
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingTop="16dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
+            <org.destil.gpsaveraging.ui.LocationCardView
+                android:id="@+id/current_location"
+                style="@style/Card" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/current_coordinates"
-                    android:textSize="@dimen/font_medium"
-                    android:textStyle="bold" />
+            <org.destil.gpsaveraging.ui.AverageLocationCardView
+                android:id="@+id/average_location"
+                style="@style/Card" />
 
-                <TextView
-                    android:id="@+id/curr_lat_lon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/font_large" />
-
-                <TextView
-                    android:id="@+id/curr_acc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/font_large" />
-
-                <TextView
-                    android:id="@+id/curr_alt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/font_large" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/avg_ui"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_large"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/avg_lat_lon_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/average_coordinates"
-                    android:textSize="@dimen/font_medium"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/avg_lat_lon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/font_large" />
-
-                <TextView
-                    android:id="@+id/avg_acc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/font_large" />
-
-                <TextView
-                    android:id="@+id/avg_alt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/padding_small"
-                    android:textSize="@dimen/font_large" />
-
-                <TextView
-                    android:id="@+id/no_of_measurements"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/padding_small"
-                    android:textSize="@dimen/font_large" />
-            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
 
-    <Button
-        android:id="@+id/start_stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/padding_large"
-        android:text="@string/start_averaging" />
+    </android.support.v4.widget.NestedScrollView>
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/admob_ad_id">
-    </com.google.android.gms.ads.AdView>
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_record" />
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/ad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/admob_ad_id" />
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

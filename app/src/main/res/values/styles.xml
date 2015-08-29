@@ -1,5 +1,27 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat" />
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#454545</item>
+        <item name="colorAccent">#33b5e5</item>
+    </style>
+
+    <style name="CardButton" parent="TextAppearance.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:textColor">?colorAccent</item>
+    </style>
+
+    <style name="Card">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
 
 </resources>

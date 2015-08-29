@@ -3,7 +3,7 @@
 
     <!-- Layout -->
     <string name="remove_ads">Remove Ads &amp; More</string>
-    <string name="current_coordinates">Current coordinates:</string>
+    <string name="current_coordinates">Current location:</string>
     <string name="waiting_for_gps">Waiting for GPS …</string>
     <string name="share_by_email">Share by Email</string>
     <string name="export">Export to File</string>
@@ -52,5 +52,8 @@
     <string name="version">Version</string>
     <string name="problem_report">GPS Averaging Problem Report</string>
     <string name="problem_report_body">What phone do you have?\n%1$s\n\nDescribe your problem in detail:\n\n</string>
+    <string name="share">Share</string>
+    <string name="export_to_gpx">Export to GPX file</string>
+    <string name="export_to_kml">Export to KML file</string>
 
 </resources>

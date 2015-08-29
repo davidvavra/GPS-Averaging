@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package org.destil.gpsaveraging;
+package org.destil.gpsaveraging.measure;
 
 import java.util.ArrayList;
 import java.util.Date;
