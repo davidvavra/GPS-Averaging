@@ -2,14 +2,14 @@
 <resources>
     <style name="CardsLayout" parent="CardsLayoutBase">
         <item name="android:orientation">horizontal</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
     </style>
 
     <style name="Card" parent="CardBase">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_marginLeft">8dp</item>
-        <item name="android:layout_marginRight">8dp</item>
+        <item name="layout_widthPercent">50%</item>
+    </style>
+
+    <style name="Card.Second">
+        <item name="android:layout_toRightOf">@id/current_location</item>
     </style>
 </resources>

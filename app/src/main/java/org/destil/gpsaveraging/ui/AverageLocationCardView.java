@@ -34,8 +34,7 @@ public class AverageLocationCardView extends LocationCardView {
     public void updateLocation(Location location) {
         super.updateLocation(location);
         String noMeasurements = getContext().getString(R.string.measurements, Measurements.getInstance().size());
-        vCardContent.setText(vCardContent.getText() + "\n" + noMeasurements);
-
+        vMeasurements.setText(noMeasurements);
     }
 
     public View getActionsView() {

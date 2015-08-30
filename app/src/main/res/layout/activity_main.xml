@@ -50,7 +50,7 @@
             android:clipChildren="false"
             android:clipToPadding="false">
 
-            <LinearLayout style="@style/CardsLayout">
+            <android.support.percent.PercentRelativeLayout style="@style/CardsLayout">
 
                 <org.destil.gpsaveraging.ui.LocationCardView
                     android:id="@+id/current_location"
@@ -58,9 +58,9 @@
 
                 <org.destil.gpsaveraging.ui.AverageLocationCardView
                     android:id="@+id/average_location"
-                    style="@style/Card" />
+                    style="@style/Card.Second" />
 
-            </LinearLayout>
+            </android.support.percent.PercentRelativeLayout>
 
         </ScrollView>
 

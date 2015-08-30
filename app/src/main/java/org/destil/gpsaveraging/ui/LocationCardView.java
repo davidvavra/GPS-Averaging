@@ -7,6 +7,7 @@ import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,7 +22,7 @@ import butterknife.OnClick;
 /**
  * Card showing a location.
  */
-public class LocationCardView extends CardView {
+public class LocationCardView extends FrameLayout {
 
     @Bind(R.id.card_title)
     TextView vCardTitle;
@@ -29,6 +30,8 @@ public class LocationCardView extends CardView {
     TextView vCardContent;
     @Bind(R.id.actions)
     LinearLayout vActions;
+    @Bind(R.id.measurements)
+    TextView vMeasurements;
 
     public LocationCardView(Context context) {
         super(context);
