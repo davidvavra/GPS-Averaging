@@ -5,9 +5,23 @@
         <item name="colorAccent">#33b5e5</item>
     </style>
 
+    <style name="CardsLayoutBase">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:clipChildren">false</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:paddingTop">16dp</item>
+    </style>
+
+    <!-- portrait -->
+    <style name="CardsLayout" parent="CardsLayoutBase">
+        <item name="android:orientation">vertical</item>
+    </style>
+
     <style name="CardButton" parent="TextAppearance.AppCompat.Button">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">?selectableItemBackground</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:paddingLeft">16dp</item>
@@ -15,13 +29,17 @@
         <item name="android:textColor">?colorAccent</item>
     </style>
 
-    <style name="Card">
-        <item name="android:layout_width">match_parent</item>
+    <style name="CardBase">
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <!-- portrait -->
+    <style name="Card" parent="CardBase">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
     </style>
 
 </resources>

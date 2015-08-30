@@ -55,5 +55,6 @@
     <string name="share">Share</string>
     <string name="export_to_gpx">Export to GPX file</string>
     <string name="export_to_kml">Export to KML file</string>
+    <string name="no_app_to_handle">No app to handle this file.</string>
 
 </resources>

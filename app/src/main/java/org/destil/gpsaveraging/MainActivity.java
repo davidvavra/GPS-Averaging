@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.empty)
     LinearLayout vEmpty;
     @Bind(R.id.cards)
-    NestedScrollView vCards;
+    ScrollView vCards;
     @Bind(R.id.fab)
     FloatingActionButton vFab;
     @Bind(R.id.ad)

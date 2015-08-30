@@ -37,20 +37,14 @@
 
     </LinearLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:id="@+id/cards"
         android:layout_width="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:paddingTop="16dp">
+        <LinearLayout style="@style/CardsLayout">
 
             <org.destil.gpsaveraging.ui.LocationCardView
                 android:id="@+id/current_location"
@@ -62,7 +56,7 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

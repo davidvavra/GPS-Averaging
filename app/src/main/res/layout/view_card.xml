@@ -46,21 +46,25 @@
             android:layout_height="1dp"
             android:background="#1f000000" />
 
-        <TextView
+        <Button
             style="@style/CardButton"
+            android:id="@+id/share"
             android:layout_marginTop="8dp"
             android:text="@string/share" />
 
-        <TextView
+        <Button
             style="@style/CardButton"
+            android:id="@+id/map"
             android:text="@string/show_on_map" />
 
-        <TextView
+        <Button
             style="@style/CardButton"
+            android:id="@+id/gpx"
             android:text="@string/export_to_gpx" />
 
-        <TextView
+        <Button
             style="@style/CardButton"
+            android:id="@+id/kml"
             android:text="@string/export_to_kml" />
     </LinearLayout>
 </LinearLayout>
