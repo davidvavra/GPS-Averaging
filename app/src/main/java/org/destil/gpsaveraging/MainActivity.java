@@ -1,13 +1,10 @@
 package org.destil.gpsaveraging;
 
+import android.Manifest;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -29,16 +26,21 @@ import org.destil.gpsaveraging.measure.event.AveragedLocationEvent;
 import org.destil.gpsaveraging.ui.Animations;
 import org.destil.gpsaveraging.ui.AverageLocationCardView;
 import org.destil.gpsaveraging.ui.LocationCardView;
+import org.destil.gpsaveraging.util.Toas;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
+import permissions.dispatcher.ShowsRationale;
 
 /**
  * Activity which displays current and averaged location.
  *
  * @author David Vávra (david@vavra.me)
  */
+@RuntimePermissions
 public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.empty)
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             showWaitingForGps();
         }
         changeFab();
-        GpsObserver.getInstance().start();
+        MainActivityPermissionsDispatcher.observeGpsWithCheck(this);
     }
 
     @Override
@@ -91,6 +93,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         App.bus().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // NOTE: delegate the permission handling to generated method
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @Subscribe
@@ -135,6 +143,17 @@ public class MainActivity extends AppCompatActivity {
         }
         changeFab();
     }
+
+    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    void observeGps() {
+        GpsObserver.getInstance().start();
+    }
+
+    @ShowsRationale(Manifest.permission.ACCESS_FINE_LOCATION)
+    void showRationaleForLocation() {
+        Toas.t(R.string.location_permission_rationale);
+    }
+
 
     /**
      * Restores state after rotation.
@@ -225,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
         builder.addKeyword("places");
         builder.addKeyword("check in");
         builder.addTestDevice("6E70B945F7D166EA14779C899463B8BC"); // My N7
+        builder.addTestDevice("197CB241DBFB335DD54A6D050DE58792"); // My N5
         vAd.loadAd(builder.build());
     }
 }

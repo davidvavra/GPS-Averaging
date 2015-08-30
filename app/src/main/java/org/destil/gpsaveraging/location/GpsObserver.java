@@ -36,6 +36,7 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
         return sInstance;
     }
 
+    @SuppressWarnings("ResourceType")
     public void start() {
         if (locationManager == null) {
             hasFix = false;
@@ -45,9 +46,12 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
         }
     }
 
+    @SuppressWarnings("ResourceType")
     public void stop() {
-        locationManager.removeUpdates(this);
-        locationManager.removeGpsStatusListener(this);
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+            locationManager.removeGpsStatusListener(this);
+        }
     }
 
     public boolean hasFix() {
