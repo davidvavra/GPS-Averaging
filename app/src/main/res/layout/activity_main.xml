@@ -1,84 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/empty"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="?android:attr/android:progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textSize="24sp"
-            tools:text="@string/waiting_for_gps" />
+            <ProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/android:progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/satellites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textSize="14sp"
-            tools:text="9 satellites visible" />
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="24sp"
+                tools:text="@string/waiting_for_gps" />
 
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/cards"
-        android:layout_width="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:layout_height="match_parent">
-
-        <LinearLayout style="@style/CardsLayout">
-
-            <org.destil.gpsaveraging.ui.LocationCardView
-                android:id="@+id/current_location"
-                style="@style/Card" />
-
-            <org.destil.gpsaveraging.ui.AverageLocationCardView
-                android:id="@+id/average_location"
-                style="@style/Card" />
+            <TextView
+                android:id="@+id/satellites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="14sp"
+                tools:text="9 satellites visible" />
 
         </LinearLayout>
 
-    </ScrollView>
+        <ScrollView
+            android:id="@+id/cards"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical">
+            <LinearLayout style="@style/CardsLayout">
+
+                <org.destil.gpsaveraging.ui.LocationCardView
+                    android:id="@+id/current_location"
+                    style="@style/Card" />
+
+                <org.destil.gpsaveraging.ui.AverageLocationCardView
+                    android:id="@+id/average_location"
+                    style="@style/Card" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_record" />
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/ad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            ads:adSize="SMART_BANNER"
-            ads:adUnitId="@string/admob_ad_id" />
-    </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/admob_ad_id" />
+</LinearLayout>
