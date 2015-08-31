@@ -3,6 +3,7 @@ package org.destil.gpsaveraging;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,7 +27,7 @@ import org.destil.gpsaveraging.measure.event.AveragedLocationEvent;
 import org.destil.gpsaveraging.ui.Animations;
 import org.destil.gpsaveraging.ui.AverageLocationCardView;
 import org.destil.gpsaveraging.ui.LocationCardView;
-import org.destil.gpsaveraging.util.Toas;
+import org.destil.gpsaveraging.util.Snackbar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     LocationCardView vCurrentLocation;
     @Bind(R.id.average_location)
     AverageLocationCardView vAverageLocation;
+    @Bind(R.id.coordinator)
+    CoordinatorLayout vCoordinator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onGpsNotAvailable(GpsNotAvailableEvent e) {
-        showEmpty();
-        vStatus.setText(R.string.gps_not_available);
-        vProgress.setVisibility(View.GONE);
-        vSatellites.setVisibility(View.GONE);
+        Snackbar.show(vCoordinator, R.string.gps_not_available);
     }
 
     @Subscribe
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
     @ShowsRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showRationaleForLocation() {
-        Toas.t(R.string.location_permission_rationale);
+        Snackbar.show(vCoordinator, R.string.location_permission_rationale);
     }
 
 

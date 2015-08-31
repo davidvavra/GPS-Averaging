@@ -8,7 +8,7 @@ import android.net.Uri;
 import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.measure.Measurements;
-import org.destil.gpsaveraging.util.Toas;
+import org.destil.gpsaveraging.util.Snackbar;
 
 /**
  * Collection of external Intents.
@@ -22,7 +22,7 @@ public class IntentUtils {
             shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, Exporter.getInstance().toShareText(Measurements.getInstance()));
             activity.startActivity(shareIntent);
         } catch (ActivityNotFoundException e) {
-            Toas.t(R.string.no_app_to_handle);
+            Snackbar.show(activity, R.string.no_app_to_handle);
         }
     }
 
@@ -44,7 +44,7 @@ public class IntentUtils {
             final Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri.toString()));
             activity.startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            Toas.t(R.string.no_app_to_handle);
+            Snackbar.show(activity, R.string.no_app_to_handle);
         }
     }
 
@@ -67,7 +67,7 @@ public class IntentUtils {
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             activity.startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            Toas.t(R.string.no_app_to_handle);
+            Snackbar.show(activity, R.string.no_app_to_handle);
         }
     }
 }
