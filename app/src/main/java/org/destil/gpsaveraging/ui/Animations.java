@@ -1,5 +1,6 @@
 package org.destil.gpsaveraging.ui;
 
+import android.content.Context;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -8,17 +9,28 @@ import android.view.animation.TranslateAnimation;
 import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class Animations {
 
-    public static void showFromTop(final View view) {
+    private final Context mContext;
+
+    @Inject
+    public Animations(Context context) {
+        mContext = context;
+    }
+
+    public void showFromTop(final View view) {
         animate(view, R.anim.show_from_top, false, true);
     }
 
-    public static void hideToTop(final View view) {
+    public void hideToTop(final View view) {
         animate(view, R.anim.hide_to_top, true, false);
     }
 
-    public static void moveUpAndExpand(final AverageLocationCardView vAverageLocation) {
+    public void moveUpAndExpand(final AverageLocationCardView vAverageLocation) {
         animate(vAverageLocation, R.anim.move_to_top, true, true, new AnimationEndCallback() {
             @Override
             public void onAnimationEnd() {
@@ -27,7 +39,7 @@ public class Animations {
         });
     }
 
-    public static void collapseAndMoveDown(final AverageLocationCardView averageLocation, final LocationCardView currentLocation) {
+    public void collapseAndMoveDown(final AverageLocationCardView averageLocation, final LocationCardView currentLocation) {
         animate(averageLocation.getActionsView(), R.anim.collapse, true, false, new AnimationEndCallback() {
             @Override
             public void onAnimationEnd() {
@@ -37,12 +49,12 @@ public class Animations {
         });
     }
 
-    private static void animate(View view, int animationRes, boolean visibleStart, boolean visibleEnd) {
+    private void animate(View view, int animationRes, boolean visibleStart, boolean visibleEnd) {
         animate(view, animationRes, visibleStart, visibleEnd, null);
     }
 
-    private static void animate(final View view, int animationRes, final boolean visibleStart, final boolean visibleEnd, final AnimationEndCallback animationEndCallback) {
-        final Animation animation = AnimationUtils.loadAnimation(App.get(), animationRes);
+    private void animate(final View view, int animationRes, final boolean visibleStart, final boolean visibleEnd, final AnimationEndCallback animationEndCallback) {
+        final Animation animation = AnimationUtils.loadAnimation(mContext, animationRes);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {

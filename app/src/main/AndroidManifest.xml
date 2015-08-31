@@ -64,7 +64,7 @@
             android:label="@string/about" />
 
         <service
-            android:name=".measure.AveragingService"
+            android:name=".measure.PeriodicService"
             android:exported="false" />
 
         <meta-data

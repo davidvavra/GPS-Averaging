@@ -21,24 +21,16 @@ import android.support.annotation.NonNull;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Bus;
 
+import org.destil.gpsaveraging.dagger.AppComponent;
+import org.destil.gpsaveraging.dagger.AppModule;
+import org.destil.gpsaveraging.dagger.DaggerAppComponent;
 import org.destil.gpsaveraging.util.MainThreadBus;
 
 import io.fabric.sdk.android.Fabric;
 
 public class App extends Application {
 
-    private static App sInstance;
-
-    private static Bus sBus;
-
-    @NonNull
-    public static App get() {
-        return sInstance;
-    }
-
-    public static Bus bus() {
-        return sBus;
-    }
+    private static AppComponent sComponent;
 
     @Override
     public void onCreate() {
@@ -46,7 +38,10 @@ public class App extends Application {
         if (!BuildConfig.DEBUG) {
             Fabric.with(this, new Crashlytics());
         }
-        sInstance = this;
-        sBus = new MainThreadBus();
+        sComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+    }
+
+    public static AppComponent component() {
+        return sComponent;
     }
 }

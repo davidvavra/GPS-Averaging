@@ -3,7 +3,6 @@ package org.destil.gpsaveraging.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
-import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +10,12 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.data.Exporter;
-import org.destil.gpsaveraging.data.IntentUtils;
+import org.destil.gpsaveraging.data.Intents;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,6 +35,11 @@ public class LocationCardView extends FrameLayout {
     @Bind(R.id.measurements)
     TextView vMeasurements;
 
+    @Inject
+    Exporter mExporter;
+    @Inject
+    Intents mIntents;
+
     public LocationCardView(Context context) {
         super(context);
         init();
@@ -51,31 +58,32 @@ public class LocationCardView extends FrameLayout {
     protected void init() {
         addView(LayoutInflater.from(getContext()).inflate(R.layout.view_card, this, false));
         ButterKnife.bind(this);
+        App.component().injectToLocationCardView(this);
         vActions.setVisibility(View.GONE);
     }
 
     public void updateLocation(Location location) {
-        String locationText = Exporter.formatLatLon(location) + "\n" + Exporter.formatAccuracy(location) + "\n" + Exporter.formatAltitude(location);
+        String locationText = mExporter.formatLatLon(location) + "\n" + mExporter.formatAccuracy(location) + "\n" + mExporter.formatAltitude(location);
         vCardContent.setText(locationText);
     }
 
     @OnClick(R.id.share)
     public void onShare(View view) {
-        IntentUtils.share((Activity) getContext());
+        mIntents.share((Activity) getContext());
     }
 
     @OnClick(R.id.map)
     public void onMap(View view) {
-        IntentUtils.showOnMap((Activity) getContext());
+        mIntents.showOnMap((Activity) getContext());
     }
 
     @OnClick(R.id.gpx)
     public void onGpx(View view) {
-        IntentUtils.exportToGpx((Activity) getContext());
+        mIntents.exportToGpx((Activity) getContext());
     }
 
     @OnClick(R.id.kml)
     public void onKml(View view) {
-        IntentUtils.exportToKml((Activity) getContext());
+        mIntents.exportToKml((Activity) getContext());
     }
 }

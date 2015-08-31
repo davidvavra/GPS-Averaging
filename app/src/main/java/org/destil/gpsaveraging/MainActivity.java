@@ -1,8 +1,8 @@
 package org.destil.gpsaveraging;
 
 import android.Manifest;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,22 +12,26 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import org.destil.gpsaveraging.data.Intents;
 import org.destil.gpsaveraging.location.GpsObserver;
 import org.destil.gpsaveraging.location.event.CurrentLocationEvent;
 import org.destil.gpsaveraging.location.event.FirstFixEvent;
 import org.destil.gpsaveraging.location.event.GpsNotAvailableEvent;
 import org.destil.gpsaveraging.location.event.SatellitesEvent;
-import org.destil.gpsaveraging.measure.AveragingService;
+import org.destil.gpsaveraging.measure.LocationAverager;
 import org.destil.gpsaveraging.measure.Measurements;
 import org.destil.gpsaveraging.measure.event.AveragedLocationEvent;
+import org.destil.gpsaveraging.ui.Ad;
 import org.destil.gpsaveraging.ui.Animations;
 import org.destil.gpsaveraging.ui.AverageLocationCardView;
 import org.destil.gpsaveraging.ui.LocationCardView;
 import org.destil.gpsaveraging.util.Snackbar;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -65,42 +69,64 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.coordinator)
     CoordinatorLayout vCoordinator;
 
+    @Inject
+    Bus mBus;
+
+    @Inject
+    GpsObserver mGps;
+
+    @Inject
+    Animations mAnimations;
+
+    @Inject
+    Measurements mMeasurements;
+
+    @Inject
+    LocationAverager mAverager;
+
+    @Inject
+    Intents mIntents;
+
+    @Inject
+    Ad mAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        App.bus().register(this);
-        loadAd();
+        App.component().injectToMainActivity(this);
+        mBus.register(this);
+        mAd.load(vAd);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (GpsObserver.getInstance().hasFix()) {
+        if (mGps.hasFix()) {
             showCurrentLocation();
         } else {
             showWaitingForGps();
         }
         changeFab();
-        MainActivityPermissionsDispatcher.observeGpsWithCheck(this);
+        observeGps();
+        //TODO MainActivityPermissionsDispatcher.observeGpsWithCheck(this);
     }
 
     @Override
     protected void onStop() {
-        GpsObserver.getInstance().stop();
+        mGps.stop();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        App.bus().unregister(this);
+        mBus.unregister(this);
         super.onDestroy();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        // NOTE: delegate the permission handling to generated method
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
@@ -109,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
         if (vCards.getVisibility() == View.GONE) {
             vEmpty.setVisibility(View.GONE);
             vAverageLocation.setVisibility(View.GONE);
-            Animations.showFromTop(vCards);
-            Animations.showFromTop(vFab);
+            mAnimations.showFromTop(vCards);
+            mAnimations.showFromTop(vFab);
         }
     }
 
@@ -136,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void onFabClicked(View view) {
-        if (AveragingService.isRunning()) {
+        if (mAverager.isRunning()) {
             stopAveraging();
         } else {
             startAveraging();
@@ -144,9 +170,10 @@ public class MainActivity extends AppCompatActivity {
         changeFab();
     }
 
+
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     void observeGps() {
-        GpsObserver.getInstance().start();
+        mGps.start();
     }
 
     @ShowsRationale(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -162,15 +189,15 @@ public class MainActivity extends AppCompatActivity {
         vEmpty.setVisibility(View.GONE);
         vCards.setVisibility(View.VISIBLE);
         vFab.setVisibility(View.VISIBLE);
-        vCurrentLocation.updateLocation(GpsObserver.getInstance().getLastLocation());
-        boolean hasMeasurements = Measurements.getInstance().size() > 0;
-        if (!hasMeasurements || AveragingService.isRunning()) {
+        vCurrentLocation.updateLocation(mGps.getLastLocation());
+        boolean hasMeasurements = mMeasurements.size() > 0;
+        if (!hasMeasurements || mAverager.isRunning()) {
             vCurrentLocation.setVisibility(View.VISIBLE);
         } else {
             vCurrentLocation.setVisibility(View.GONE);
         }
-        vAverageLocation.updateLocation(Measurements.getInstance().getAveragedLocation());
-        if (AveragingService.isRunning()) {
+        vAverageLocation.updateLocation(mMeasurements.getAveragedLocation());
+        if (mAverager.isRunning()) {
             vAverageLocation.setVisibility(View.VISIBLE);
             vAverageLocation.getActionsView().setVisibility(View.GONE);
         } else {
@@ -192,16 +219,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void startAveraging() {
         if (vCurrentLocation.getVisibility() == View.GONE) {
-            Animations.collapseAndMoveDown(vAverageLocation, vCurrentLocation);
+            mAnimations.collapseAndMoveDown(vAverageLocation, vCurrentLocation);
         } else {
             vAverageLocation.setVisibility(View.VISIBLE); // animation doesn't work otherwise
-            Animations.showFromTop(vAverageLocation);
+            mAnimations.showFromTop(vAverageLocation);
         }
-        AveragingService.start();
+        mAverager.start();
     }
 
     private void changeFab() {
-        if (AveragingService.isRunning()) {
+        if (mAverager.isRunning()) {
             vFab.setImageResource(R.drawable.ic_stop);
         } else {
             vFab.setImageResource(R.drawable.ic_record);
@@ -209,42 +236,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopAveraging() {
-        Animations.hideToTop(vCurrentLocation);
-        Animations.moveUpAndExpand(vAverageLocation);
-        AveragingService.stop();
-        Measurements measurements = Measurements.getInstance();
-        // Intent API & Locus integration
-        if (measurements.size() > 0
-                && getIntent().getAction() != null
-                && (getIntent().getAction().equals("menion.android.locus.GET_POINT") || getIntent().getAction().equals(
-                "cz.destil.gpsaveraging.AVERAGED_LOCATION"))) {
-            Intent intent = new Intent();
-            intent.putExtra("name", getString(R.string.average_coordinates));
-            intent.putExtra("latitude", measurements.getLatitude());
-            intent.putExtra("longitude", measurements.getLongitude());
-            intent.putExtra("altitude", measurements.getAltitude());
-            intent.putExtra("accuracy", (double) measurements.getAccuracy());
-            setResult(RESULT_OK, intent);
-            finish();
-        }
+        mAnimations.hideToTop(vCurrentLocation);
+        mAnimations.moveUpAndExpand(vAverageLocation);
+        mAverager.stop();
+        mIntents.answerToThirdParty(this);
     }
 
     private void showEmpty() {
         vEmpty.setVisibility(View.VISIBLE);
         vCards.setVisibility(View.GONE);
         vFab.setVisibility(View.GONE);
-    }
-
-    private void loadAd() {
-        AdRequest.Builder builder = new AdRequest.Builder();
-        builder.addKeyword("geocaching");
-        builder.addKeyword("gps");
-        builder.addKeyword("location");
-        builder.addKeyword("measurements");
-        builder.addKeyword("places");
-        builder.addKeyword("check in");
-        builder.addTestDevice("6E70B945F7D166EA14779C899463B8BC"); // My N7
-        builder.addTestDevice("197CB241DBFB335DD54A6D050DE58792"); // My N5
-        vAd.loadAd(builder.build());
     }
 }

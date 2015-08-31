@@ -15,23 +15,24 @@ import android.support.v7.app.NotificationCompat;
 import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.MainActivity;
 import org.destil.gpsaveraging.R;
-import org.destil.gpsaveraging.measure.event.AveragedLocationEvent;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AveragingService extends Service implements LocationListener {
+import javax.inject.Inject;
 
-    // measurements
+public class PeriodicService extends Service implements LocationListener {
+
     private static final int MEASUREMENT_DELAY = 2000; // delay between
-
-    private static boolean isRunning = false;
+    @Inject
+    LocationAverager mAverager;
     private LocationManager mLocationManager;
     private Timer mTimer;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        App.component().injectToAveragingService(this);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
@@ -41,6 +42,7 @@ public class AveragingService extends Service implements LocationListener {
         return null;
     }
 
+    @SuppressWarnings("ResourceType")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // start averaging
@@ -50,6 +52,7 @@ public class AveragingService extends Service implements LocationListener {
         return START_STICKY;
     }
 
+    @SuppressWarnings("ResourceType")
     @Override
     public void onDestroy() {
         if (mTimer != null) {
@@ -58,18 +61,6 @@ public class AveragingService extends Service implements LocationListener {
         stopForeground(true);
         mLocationManager.removeUpdates(this);
         super.onDestroy();
-    }
-
-    public static void start() {
-        isRunning = true;
-        Measurements.getInstance().clean();
-        measureLocation();
-        App.get().startService(new Intent(App.get(), AveragingService.class));
-    }
-
-    public static void stop() {
-        isRunning = false;
-        App.get().stopService(new Intent(App.get(), AveragingService.class));
     }
 
     /**
@@ -82,19 +73,9 @@ public class AveragingService extends Service implements LocationListener {
 
             @Override
             public void run() {
-                measureLocation();
+                mAverager.measureLocation();
             }
         }, MEASUREMENT_DELAY, MEASUREMENT_DELAY);
-    }
-
-    private static void measureLocation() {
-        LocationManager locationManager = (LocationManager) App.get().getSystemService(Context.LOCATION_SERVICE);
-        Location location = locationManager.getLastKnownLocation("gps");
-        if (location != null) {
-            Measurements measurements = Measurements.getInstance();
-            measurements.add(location);
-            App.bus().post(new AveragedLocationEvent(measurements.getAveragedLocation()));
-        }
     }
 
     /**
@@ -126,10 +107,6 @@ public class AveragingService extends Service implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // ignore
-    }
-
-    public static boolean isRunning() {
-        return isRunning;
     }
 
 }

@@ -21,15 +21,18 @@ import java.util.List;
 
 import android.location.Location;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * Group all the measurements. It allows the calculation of the weighted average
  * of the measured values and record times of measurement.
  * 
  * @author Libor Tvrdik (libor.tvrdik@gmail.com), Destil
  */
+@Singleton
 public class Measurements {
 
-	private static volatile Measurements instance = null;
 	private final List<Location> locations;
 	private double averageLat;
 	private double averageLon;
@@ -42,19 +45,10 @@ public class Measurements {
 	private float distanceFromAverageCoordsSum;
 
 	/** Creates a new list. */
-	private Measurements() {
-		this.locations = new ArrayList<Location>();
+    @Inject
+	public Measurements() {
+		this.locations = new ArrayList<>();
 		clean();
-	}
-
-	/**
-	 * Singleton
-	 */
-	public static Measurements getInstance() {
-		if (instance == null) {
-			instance = new Measurements();
-		}
-		return instance;
 	}
 
 	/**
@@ -195,7 +189,7 @@ public class Measurements {
 	@Override
 	public synchronized String toString() {
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		sb.append(getClass().getSimpleName()).append(": (");
 		sb.append("avg lat=").append(getLatitude());
