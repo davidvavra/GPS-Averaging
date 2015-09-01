@@ -1,4 +1,4 @@
-package org.destil.gpsaveraging.util;
+package org.destil.gpsaveraging.ui.view;
 
 import android.app.Activity;
 import android.support.annotation.StringRes;

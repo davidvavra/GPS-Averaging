@@ -7,7 +7,7 @@ import android.net.Uri;
 
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.measure.Measurements;
-import org.destil.gpsaveraging.util.Snackbar;
+import org.destil.gpsaveraging.ui.view.Snackbar;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -1,4 +1,4 @@
-package org.destil.gpsaveraging.ui;
+package org.destil.gpsaveraging.ui.view;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,65 +1,39 @@
-/*
-   Copyright 2012 David "Destil" Vavra
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- */
-package org.destil.gpsaveraging.ui;
+package org.destil.gpsaveraging.ui.fragment;
 
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.PreferenceActivity;
-import android.view.MenuItem;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.data.Preferences;
 
 /**
- * Settings for units and coordinate format. It is using deprecated
- * PreferenceScreen, because modern fragment-based version is not part of
- * compatibility library.
- *
- * @author Destil
+ * Fragment containing preferences.
  */
-public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
-
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     // UI elements
     private ListPreference uiUnits;
     private ListPreference uiCoordinateFormat;
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.activity_preferences);
+    public void onCreatePreferences(Bundle bundle, String rootKey) {
+        addPreferencesFromResource(R.xml.fragment_preferences);
         uiUnits = (ListPreference) findPreference(Preferences.UNITS);
         uiCoordinateFormat = (ListPreference) findPreference(Preferences.COORDINATE_FORMAT);
         init();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         SharedPreferences preferences = getPreferenceScreen().getSharedPreferences();
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
@@ -73,18 +47,6 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
             if (uiCoordinateFormat.getEntry() != null) {
                 uiCoordinateFormat.setSummary(uiCoordinateFormat.getEntry());
             }
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; go home
-                //	startActivity(new Intent(this, OldActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 

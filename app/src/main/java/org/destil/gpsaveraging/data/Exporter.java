@@ -20,7 +20,6 @@ import android.location.Location;
 
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.measure.Measurements;
-import org.destil.gpsaveraging.ui.SettingsActivity;
 
 import java.io.BufferedWriter;
 import java.io.File;

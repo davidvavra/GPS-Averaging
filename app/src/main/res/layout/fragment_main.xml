@@ -53,11 +53,11 @@
 
             <android.support.percent.PercentRelativeLayout style="@style/CardsLayout">
 
-                <org.destil.gpsaveraging.ui.LocationCardView
+                <org.destil.gpsaveraging.ui.view.LocationCardView
                     android:id="@+id/current_location"
                     style="@style/Card" />
 
-                <org.destil.gpsaveraging.ui.AverageLocationCardView
+                <org.destil.gpsaveraging.ui.view.AverageLocationCardView
                     android:id="@+id/average_location"
                     style="@style/Card.Second" />
 

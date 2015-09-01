@@ -2,8 +2,9 @@ package org.destil.gpsaveraging.dagger;
 
 import org.destil.gpsaveraging.MainActivity;
 import org.destil.gpsaveraging.measure.PeriodicService;
-import org.destil.gpsaveraging.ui.AverageLocationCardView;
-import org.destil.gpsaveraging.ui.LocationCardView;
+import org.destil.gpsaveraging.ui.view.AverageLocationCardView;
+import org.destil.gpsaveraging.ui.view.LocationCardView;
+import org.destil.gpsaveraging.ui.fragment.MainFragment;
 
 import javax.inject.Singleton;
 
@@ -22,4 +23,6 @@ public interface AppComponent {
     void injectToLocationCardView(LocationCardView locationCardView);
 
     void injectToAverageLocationCardView(AverageLocationCardView averageLocationCardView);
+
+    void injetToMainFragment(MainFragment mainFragment);
 }

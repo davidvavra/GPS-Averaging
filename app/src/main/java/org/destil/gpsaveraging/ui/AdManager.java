@@ -7,10 +7,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class Ad {
+public class AdManager {
 
     @Inject
-    public Ad() {
+    public AdManager() {
     }
 
     public void load(AdView adView) {

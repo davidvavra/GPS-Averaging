@@ -6,8 +6,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 
-import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
+import org.destil.gpsaveraging.ui.view.AverageLocationCardView;
+import org.destil.gpsaveraging.ui.view.LocationCardView;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
