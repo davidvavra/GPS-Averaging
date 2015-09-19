@@ -7,38 +7,28 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.data.Exporter;
 import org.destil.gpsaveraging.data.Intents;
+import org.destil.gpsaveraging.databinding.ViewCardBinding;
+import org.destil.gpsaveraging.ui.viewmodel.CardViewModel;
 
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Card showing a location.
  */
-public class LocationCardView extends FrameLayout {
-
-    @Bind(R.id.card_title)
-    TextView vCardTitle;
-    @Bind(R.id.card_content)
-    TextView vCardContent;
-    @Bind(R.id.actions)
-    LinearLayout vActions;
-    @Bind(R.id.measurements)
-    TextView vMeasurements;
+public class LocationCardView extends FrameLayout implements CardViewModel.ClickListener {
 
     @Inject
     Exporter mExporter;
     @Inject
     Intents mIntents;
+
+    ViewCardBinding mBinding;
+    CardViewModel mViewModel;
 
     public LocationCardView(Context context) {
         super(context);
@@ -56,34 +46,41 @@ public class LocationCardView extends FrameLayout {
     }
 
     protected void init() {
-        addView(LayoutInflater.from(getContext()).inflate(R.layout.view_card, this, false));
-        ButterKnife.bind(this);
         App.component().injectToLocationCardView(this);
-        vActions.setVisibility(View.GONE);
+        mBinding = ViewCardBinding.inflate(LayoutInflater.from(getContext()), this, false);
+        mViewModel = new CardViewModel(this);
+        mBinding.setViewModel(mViewModel);
+        addView(mBinding.getRoot());
+        mViewModel.title.set(getContext().getString(R.string.current_coordinates));
     }
 
     public void updateLocation(Location location) {
         String locationText = mExporter.formatLatLon(location) + "\n" + mExporter.formatAccuracy(location) + "\n" + mExporter.formatAltitude(location);
-        vCardContent.setText(locationText);
+        mViewModel.location.set(locationText);
     }
 
-    @OnClick(R.id.share)
-    public void onShare(View view) {
+    @Override
+    public void onShareClicked() {
         mIntents.share((Activity) getContext());
     }
 
-    @OnClick(R.id.map)
-    public void onMap(View view) {
+    @Override
+    public void onMapClicked() {
         mIntents.showOnMap((Activity) getContext());
     }
 
-    @OnClick(R.id.gpx)
-    public void onGpx(View view) {
+    @Override
+    public void onGpxClicked() {
         mIntents.exportToGpx((Activity) getContext());
     }
 
-    @OnClick(R.id.kml)
-    public void onKml(View view) {
+    @Override
+    public void onKmlClicked() {
         mIntents.exportToKml((Activity) getContext());
     }
+
+    public View getActionsView() {
+        return mBinding.actions;
+    }
+
 }

@@ -1,7 +1,5 @@
 package org.destil.gpsaveraging.ui.fragment;
 
-import javax.inject.Inject;
-
 import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,10 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.base.BaseFragment;
@@ -31,6 +28,8 @@ import org.destil.gpsaveraging.ui.AdManager;
 import org.destil.gpsaveraging.ui.Animations;
 import org.destil.gpsaveraging.ui.view.Snackbar;
 import org.destil.gpsaveraging.ui.viewmodel.MainFragmentViewModel;
+
+import javax.inject.Inject;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import permissions.dispatcher.ShowsRationale;
@@ -39,7 +38,7 @@ import permissions.dispatcher.ShowsRationale;
  * Fragment doing main functions of the app.
  */
 @RuntimePermissions
-public class MainFragment extends BaseFragment {
+public class MainFragment extends BaseFragment implements MainFragmentViewModel.FabListener {
 
     @Inject
     Bus mBus;
@@ -63,7 +62,7 @@ public class MainFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
-        mViewModel = new MainFragmentViewModel();
+        mViewModel = new MainFragmentViewModel(this);
         mBinding.setViewModel(mViewModel);
         App.component().injectToMainFragment(this);
         mBus.register(this);
@@ -93,7 +92,6 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void onDestroyView() {
-        ButterKnife.unbind(this);
         mBus.unregister(this);
         super.onDestroyView();
     }
@@ -133,8 +131,8 @@ public class MainFragment extends BaseFragment {
         mBinding.averageLocation.updateLocation(e.getLocation());
     }
 
-    @OnClick(R.id.fab)
-    public void onFabClicked(View view) {
+    @Override
+    public void onFabClicked() {
         if (mAverager.isRunning()) {
             stopAveraging();
         } else {

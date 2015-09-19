@@ -1,92 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp">
+<layout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <data>
 
-        <FrameLayout
+        <variable
+            name="viewModel"
+            type="org.destil.gpsaveraging.ui.viewmodel.CardViewModel"/>
+
+        <import type="android.view.View" />
+    </data>
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                        xmlns:tools="http://schemas.android.com/tools"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginRight="8dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="24dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.title}"
+                        android:textSize="24sp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingMultiplier="1.1"
+                        android:paddingTop="8dp"
+                        android:text="@{viewModel.location}"
+                        android:textSize="18sp"
+                        tools:text="N 49 54.625\nE 14 13.415\n+-10m\nAltitude: 277.5m"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@{viewModel.measurements}"
+                    tools:text="25 measurements"/>
+
+            </FrameLayout>
 
             <LinearLayout
+                android:id="@+id/actions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="24dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="16dp">
+                android:visibility="@{viewModel.showActions ? View.VISIBLE : View.GONE}"
+                android:paddingBottom="8dp">
 
-                <TextView
-                    android:id="@+id/card_title"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/current_coordinates"
-                    android:textSize="24sp"
-                    tools:text="Current location:" />
+                    android:layout_height="1dp"
+                    android:background="#1f000000"/>
 
-                <TextView
-                    android:id="@+id/card_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingMultiplier="1.1"
-                    android:paddingTop="8dp"
-                    android:textSize="18sp"
-                    tools:text="N 49 54.625\nE 14 13.415\n+-10m\nAltitude: 277.5m" />
+                <Button
+                    style="@style/CardButton"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{viewModel.onShareClick}"
+                    android:text="@string/share"/>
 
+                <Button
+                    style="@style/CardButton"
+                    android:onClick="@{viewModel.onMapClick}"
+                    android:text="@string/show_on_map"/>
+
+                <Button
+                    style="@style/CardButton"
+                    android:onClick="@{viewModel.onGpxClick}"
+                    android:text="@string/export_to_gpx"/>
+
+                <Button
+                    style="@style/CardButton"
+                    android:onClick="@{viewModel.onKmlClick}"
+                    android:text="@string/export_to_kml"/>
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/measurements"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:paddingBottom="8dp"
-                android:paddingEnd="8dp"
-                android:paddingRight="8dp"
-                tools:text="25 measurements" />
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:id="@+id/actions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="8dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#1f000000" />
-
-            <Button
-                android:id="@+id/share"
-                style="@style/CardButton"
-                android:layout_marginTop="8dp"
-                android:text="@string/share" />
-
-            <Button
-                android:id="@+id/map"
-                style="@style/CardButton"
-                android:text="@string/show_on_map" />
-
-            <Button
-                android:id="@+id/gpx"
-                style="@style/CardButton"
-                android:text="@string/export_to_gpx" />
-
-            <Button
-                android:id="@+id/kml"
-                style="@style/CardButton"
-                android:text="@string/export_to_kml" />
         </LinearLayout>
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+
+</layout>

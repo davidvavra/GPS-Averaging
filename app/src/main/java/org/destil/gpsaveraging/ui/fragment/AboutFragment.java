@@ -9,36 +9,29 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.base.BaseFragment;
+import org.destil.gpsaveraging.databinding.FragmentAboutBinding;
+import org.destil.gpsaveraging.ui.viewmodel.AboutViewModel;
 
 import java.util.Locale;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Fragment displaying about information.
  */
-public class AboutFragment extends BaseFragment {
-
-    @Bind(R.id.thank_you)
-    LinearLayout vThankYou;
-    @Bind(R.id.version)
-    TextView vVersion;
+public class AboutFragment extends BaseFragment implements AboutViewModel.ClickListener {
 
     private String mVersion;
+    private AboutViewModel mViewModel;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_about, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        FragmentAboutBinding binding = FragmentAboutBinding.inflate(inflater, container, false);
+        mViewModel = new AboutViewModel(this);
+        binding.setViewModel(mViewModel);
+        return binding.getRoot();
     }
 
     @Override
@@ -49,23 +42,14 @@ public class AboutFragment extends BaseFragment {
         } catch (PackageManager.NameNotFoundException e) {
             mVersion = "Unknown";
         }
-        vVersion.setText(mVersion);
+        mViewModel.version.set(mVersion);
         //TODO if (!OldActivity.isFullVersion) {
         //	findViewById(R.id.thank_you).setVisibility(View.GONE);
         //}
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
-    /**
-     * Sends mail to the author.
-     */
-    @OnClick(R.id.mail)
-    public void mailButtonClicked(View view) {
+    public void onMailClicked() {
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("text/plain");
         i.putExtra(Intent.EXTRA_EMAIL, new String[]{"gps-averaging-app@googlegroups.com"});
@@ -76,21 +60,15 @@ public class AboutFragment extends BaseFragment {
         startActivity(i);
     }
 
-    /**
-     * Rates app on Play.
-     */
-    @OnClick(R.id.rate)
-    public void rateButtonClicked(View view) {
+    @Override
+    public void onRateClicked() {
         Intent intent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://play.google.com/store/apps/details?id=org.destil.gpsaveraging"));
         startActivity(intent);
     }
 
-    /**
-     * Visits app's web
-     */
-    @OnClick(R.id.github)
-    public void webButtonClicked(View view) {
+    @Override
+    public void onGithubClicked() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/destil/GPS-Averaging"));
         startActivity(intent);
     }
