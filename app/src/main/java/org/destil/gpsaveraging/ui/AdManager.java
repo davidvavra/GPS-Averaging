@@ -23,6 +23,8 @@ public class AdManager {
         builder.addKeyword("check in");
         builder.addTestDevice("6E70B945F7D166EA14779C899463B8BC"); // My N7
         builder.addTestDevice("197CB241DBFB335DD54A6D050DE58792"); // My N5
+        builder.addTestDevice("996EE7E77D7181208AF916072F5FFE4C"); // My N5#2
+        builder.addTestDevice("622AFF2BE01381DB65A2ACAE09D77ABD"); // Genymotion
         adView.loadAd(builder.build());
     }
 }

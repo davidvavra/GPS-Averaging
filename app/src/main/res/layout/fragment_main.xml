@@ -1,85 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.design.widget.CoordinatorLayout
+    <data>
+
+        <variable
+            name="viewModel"
+            type="org.destil.gpsaveraging.ui.viewmodel.MainFragmentViewModel" />
+
+        <import type="android.view.View" />
+        <import type="org.destil.gpsaveraging.R" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/coordinator"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/empty"
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinator"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <ProgressBar
-                android:id="@+id/progress"
-                style="?android:attr/android:progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.hasFix ? View.GONE : View.VISIBLE}">
 
-            <TextView
-                android:id="@+id/status"
+                <ProgressBar
+                    style="?android:attr/android:progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textSize="24sp"
+                    android:text="@string/waiting_for_gps" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textSize="14sp"
+                    android:text="@{viewModel.satelliteInfo}"
+                    tools:text="9 satellites visible" />
+
+            </LinearLayout>
+
+            <ScrollView
+                android:id="@+id/cards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:visibility="@{viewModel.hasFix ? View.VISIBLE : View.GONE}"
+                android:clipToPadding="false">
+
+                <android.support.percent.PercentRelativeLayout style="@style/CardsLayout">
+
+                    <org.destil.gpsaveraging.ui.view.LocationCardView
+                        android:id="@+id/current_location"
+                        android:visibility="@{viewModel.hasFix &amp;&amp; !viewModel.isReadyForSharing ? View.VISIBLE : View.GONE}"
+                        style="@style/Card" />
+
+                    <org.destil.gpsaveraging.ui.view.AverageLocationCardView
+                        android:id="@+id/average_location"
+                        android:visibility="@{viewModel.isAveraging || viewModel.isReadyForSharing ? View.VISIBLE : View.GONE}"
+                        style="@style/Card.Second" />
+
+                </android.support.percent.PercentRelativeLayout>
+
+            </ScrollView>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="24sp"
-                tools:text="@string/waiting_for_gps" />
+                android:layout_gravity="end|bottom"
+                android:layout_margin="@dimen/fab_margin"
+                android:visibility="@{viewModel.hasFix ? View.VISIBLE : View.GONE}"
+                android:src="@{viewModel.isAveraging ? R.drawable.ic_stop : R.drawable.ic_record}" />
 
-            <TextView
-                android:id="@+id/satellites"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="14sp"
-                tools:text="9 satellites visible" />
+        </android.support.design.widget.CoordinatorLayout>
 
-        </LinearLayout>
-
-        <ScrollView
-            android:id="@+id/cards"
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/ad"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false">
-
-            <android.support.percent.PercentRelativeLayout style="@style/CardsLayout">
-
-                <org.destil.gpsaveraging.ui.view.LocationCardView
-                    android:id="@+id/current_location"
-                    style="@style/Card" />
-
-                <org.destil.gpsaveraging.ui.view.AverageLocationCardView
-                    android:id="@+id/average_location"
-                    style="@style/Card.Second" />
-
-            </android.support.percent.PercentRelativeLayout>
-
-        </ScrollView>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_record" />
+            android:layout_gravity="bottom"
+            app:adSize="SMART_BANNER"
+            app:adUnitId="@string/admob_ad_id" />
+    </LinearLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/ad"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/admob_ad_id" />
-</LinearLayout>
+</layout>

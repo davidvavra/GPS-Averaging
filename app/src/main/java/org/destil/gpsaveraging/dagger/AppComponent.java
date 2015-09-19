@@ -24,5 +24,5 @@ public interface AppComponent {
 
     void injectToAverageLocationCardView(AverageLocationCardView averageLocationCardView);
 
-    void injetToMainFragment(MainFragment mainFragment);
+    void injectToMainFragment(MainFragment mainFragment);
 }
