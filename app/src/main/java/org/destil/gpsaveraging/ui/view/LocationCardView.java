@@ -3,6 +3,8 @@ package org.destil.gpsaveraging.ui.view;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.data.Exporter;
 import org.destil.gpsaveraging.data.Intents;
 import org.destil.gpsaveraging.databinding.ViewCardBinding;
+import org.destil.gpsaveraging.measure.Measurements;
 import org.destil.gpsaveraging.ui.viewmodel.CardViewModel;
 
 import javax.inject.Inject;
@@ -20,12 +23,14 @@ import javax.inject.Inject;
 /**
  * Card showing a location.
  */
-public class LocationCardView extends FrameLayout implements CardViewModel.ClickListener {
+public abstract class LocationCardView extends FrameLayout implements CardViewModel.ClickListener {
 
     @Inject
     Exporter mExporter;
     @Inject
     Intents mIntents;
+    @Inject
+    Measurements mMeasurements;
 
     ViewCardBinding mBinding;
     CardViewModel mViewModel;
@@ -48,15 +53,35 @@ public class LocationCardView extends FrameLayout implements CardViewModel.Click
     protected void init() {
         App.component().injectToLocationCardView(this);
         mBinding = ViewCardBinding.inflate(LayoutInflater.from(getContext()), this, false);
-        mViewModel = new CardViewModel(this);
-        mBinding.setViewModel(mViewModel);
+        mViewModel = new CardViewModel();
+        initViewModel();
         addView(mBinding.getRoot());
-        mViewModel.title.set(getContext().getString(R.string.current_coordinates));
+        // TODO: figure out why rotating single averaged view shows current view
     }
 
-    public void updateLocation(Location location) {
-        String locationText = mExporter.formatLatLon(location) + "\n" + mExporter.formatAccuracy(location) + "\n" + mExporter.formatAltitude(location);
-        mViewModel.location.set(locationText);
+    private void initViewModel() {
+        mViewModel.setClickListener(this);
+        mBinding.setViewModel(mViewModel);
+        mViewModel.title.set(getContext().getString(getCardTitle()));
+    }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("PARENT", super.onSaveInstanceState());
+        bundle.putSerializable("VIEW_MODEL", mViewModel);
+        return bundle;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            mViewModel = (CardViewModel) bundle.getSerializable("VIEW_MODEL");
+            initViewModel();
+            state = bundle.getParcelable("PARENT");
+        }
+        super.onRestoreInstanceState(state);
     }
 
     @Override
@@ -79,8 +104,28 @@ public class LocationCardView extends FrameLayout implements CardViewModel.Click
         mIntents.exportToKml((Activity) getContext());
     }
 
+    abstract int getCardTitle();
+
+    abstract boolean addMeasurements();
+
+    public void updateLocation(Location location) {
+        String locationText = mExporter.formatLatLon(location) + "\n" + mExporter.formatAccuracy(location) + "\n" + mExporter.formatAltitude(location);
+        mViewModel.location.set(locationText);
+        if (addMeasurements()) {
+            String noMeasurements = getContext().getString(R.string.measurements, mMeasurements.size());
+            mViewModel.measurements.set(noMeasurements);
+        }
+    }
+
     public View getActionsView() {
         return mBinding.actions;
     }
 
+    public void setExpanded() {
+        mViewModel.showActions.set(true);
+    }
+
+    public void setCollapsed() {
+        mViewModel.showActions.set(false);
+    }
 }

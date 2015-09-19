@@ -95,7 +95,7 @@ public class Intents {
                 && (intent.getAction().equals("menion.android.locus.GET_POINT") || intent.getAction().equals(
                 "cz.destil.gpsaveraging.AVERAGED_LOCATION"))) {
             Intent resultIntent = new Intent();
-            resultIntent.putExtra("name", activity.getString(R.string.average_coordinates));
+            resultIntent.putExtra("name", activity.getString(R.string.averaged_location));
             resultIntent.putExtra("latitude", mMeasurements.getLatitude());
             resultIntent.putExtra("longitude", mMeasurements.getLongitude());
             resultIntent.putExtra("altitude", mMeasurements.getAltitude());

@@ -386,7 +386,7 @@ public class Exporter {
         final StringBuilder output = new StringBuilder();
         final Formatter formatter = new Formatter(output);
 
-        output.append(mContext.getString(R.string.average_coordinates)).append("\n");
+        output.append(mContext.getString(R.string.averaged_location)).append("\n");
         formatLatLonWithAccuracy(mMeasurements.getAveragedLocation(), formatter, output);
         output.append("\n\n");
 

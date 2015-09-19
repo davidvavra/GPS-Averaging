@@ -31,21 +31,23 @@ public class Animations {
         animate(view, R.anim.hide_to_top, true, false);
     }
 
-    public void moveUpAndExpand(final AverageLocationCardView vAverageLocation) {
-        animate(vAverageLocation, R.anim.move_to_top, true, true, new AnimationEndCallback() {
+    public void moveUpAndExpand(final LocationCardView locationCardView) {
+        animate(locationCardView, R.anim.move_to_top, true, true, new AnimationEndCallback() {
             @Override
             public void onAnimationEnd() {
-                animate(vAverageLocation.getActionsView(), R.anim.expand, false, true);
+                locationCardView.setExpanded();
+                animate(locationCardView.getActionsView(), R.anim.expand, false, true);
             }
         });
     }
 
-    public void collapseAndMoveDown(final AverageLocationCardView averageLocation, final LocationCardView currentLocation) {
-        animate(averageLocation.getActionsView(), R.anim.collapse, true, false, new AnimationEndCallback() {
+    public void collapseAndMoveDown(final LocationCardView averagedLocation, final LocationCardView currentLocation) {
+        animate(averagedLocation.getActionsView(), R.anim.collapse, true, false, new AnimationEndCallback() {
             @Override
             public void onAnimationEnd() {
-                animate(averageLocation, R.anim.move_to_bottom, true, true);
+                animate(averagedLocation, R.anim.move_to_bottom, true, true);
                 animate(currentLocation, R.anim.show_from_top, false, true);
+                averagedLocation.setCollapsed();
             }
         });
     }

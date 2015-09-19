@@ -2,7 +2,7 @@
 <resources>
 	<!-- Layout -->
 	<string name="remove_ads">Werbung entfernen &amp; mehr</string>
-	<string name="current_coordinates">Aktuelle Koordinaten:</string>
+	<string name="current_location">Aktuelle Koordinaten:</string>
 	<string name="waiting_for_gps">Warte auf GPS …</string>
 	<string name="share_by_email">Per E-Mail teilen</string>
 	<string name="export">Dateiexport</string>
@@ -25,7 +25,7 @@
 	<string name="show_on_map">Auf Karte zeigen</string>
 	<!-- Email -->
 	<string name="email_subject">Deine gemittelte Position</string>
-	<string name="average_coordinates">Gemittelte Position:</string>
+	<string name="averaged_location">Gemittelte Position:</string>
 	<string name="google_maps_link">Google Maps link:</string>
 	<string name="average_altitude">Gemittelte Höhe:</string>
 	<string name="email_footer">Diese Koordinaten wurde durch die Android App \"GPS Averaging\" von Destil ermittelt</string>

@@ -4,36 +4,38 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.view.View;
 
+import java.io.Serializable;
+
 /**
  * TODO: add documentation
  *
  * @author David Vávra (david@vavra.me)
  */
-public class AboutViewModel {
+public class AboutViewModel implements Serializable {
 
-    private final ClickListener mClickListener;
     public ObservableField<String> version = new ObservableField<>();
     public ObservableBoolean showThankYou = new ObservableBoolean();
-    public View.OnClickListener onMailClick = new View.OnClickListener() {
+    private transient ClickListener mClickListener;
+    public transient View.OnClickListener onMailClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             mClickListener.onMailClicked();
         }
     };
-    public View.OnClickListener onRateClick = new View.OnClickListener() {
+    public transient View.OnClickListener onRateClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             mClickListener.onRateClicked();
         }
     };
-    public View.OnClickListener onGithubClick = new View.OnClickListener() {
+    public transient View.OnClickListener onGithubClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             mClickListener.onGithubClicked();
         }
     };
 
-    public AboutViewModel(ClickListener clickListener) {
+    public void setClickListener(ClickListener clickListener) {
         mClickListener = clickListener;
     }
 

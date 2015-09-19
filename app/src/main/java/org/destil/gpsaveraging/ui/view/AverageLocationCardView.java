@@ -15,9 +15,6 @@ import javax.inject.Inject;
  */
 public class AverageLocationCardView extends LocationCardView {
 
-    @Inject
-    Measurements mMeasurements;
-
     public AverageLocationCardView(Context context) {
         super(context);
     }
@@ -31,16 +28,12 @@ public class AverageLocationCardView extends LocationCardView {
     }
 
     @Override
-    protected void init() {
-        super.init();
-        App.component().injectToAverageLocationCardView(this);
-        mViewModel.title.set(getContext().getString(R.string.average_coordinates));
+    int getCardTitle() {
+        return R.string.averaged_location;
     }
 
     @Override
-    public void updateLocation(Location location) {
-        super.updateLocation(location);
-        String noMeasurements = getContext().getString(R.string.measurements, mMeasurements.size());
-        mViewModel.measurements.set(noMeasurements);
+    boolean addMeasurements() {
+        return true;
     }
 }

@@ -62,7 +62,7 @@
 
                 <android.support.percent.PercentRelativeLayout style="@style/CardsLayout">
 
-                    <org.destil.gpsaveraging.ui.view.LocationCardView
+                    <org.destil.gpsaveraging.ui.view.CurrentLocationCardView
                         android:id="@+id/current_location"
                         style="@style/Card"
                         android:visibility="@{viewModel.hasFix &amp;&amp; !viewModel.isReadyForSharing ? View.VISIBLE : View.GONE}"/>
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:layout_margin="@dimen/fab_margin"
-                android:onClick="@{viewModel.fabOnClick}"
+                android:onClick="@{viewModel.onFabClick}"
                 android:src="@{viewModel.isAveraging ? @drawable/ic_stop : @drawable/ic_record}"
                 android:visibility="@{viewModel.hasFix ? View.VISIBLE : View.GONE}"/>
 

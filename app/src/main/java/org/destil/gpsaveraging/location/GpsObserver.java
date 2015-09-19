@@ -11,7 +11,6 @@ import android.os.Bundle;
 
 import com.squareup.otto.Bus;
 
-import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.location.event.CurrentLocationEvent;
 import org.destil.gpsaveraging.location.event.FirstFixEvent;
 import org.destil.gpsaveraging.location.event.GpsNotAvailableEvent;
@@ -72,7 +71,7 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
             GpsStatus gpsStatus = locationManager.getGpsStatus(null);
             int all = 0;
             Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
-            for (GpsSatellite satellite : satellites) {
+            for (GpsSatellite ignored : satellites) {
                 all++;
             }
             mBus.post(new SatellitesEvent(all));

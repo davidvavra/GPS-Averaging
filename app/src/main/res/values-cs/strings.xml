@@ -2,7 +2,7 @@
 <resources>
 	<!-- Layout -->
 	<string name="remove_ads">Bez reklam &amp; více</string>
-	<string name="current_coordinates">Aktuální souřadnice: </string>
+	<string name="current_location">Aktuální souřadnice: </string>
 	<string name="waiting_for_gps">Čekám na GPS...</string>
 	<string name="share_by_email">Sdílet e-mailem</string>
 	<string name="export">Do souboru</string>
@@ -25,7 +25,7 @@
 	<string name="show_on_map">Ukázat na mapě</string>
 	<!-- Email -->
 	<string name="email_subject">Vaše zprůměrovaná poloha</string>
-	<string name="average_coordinates">Zprůměrovaná poloha:</string>
+	<string name="averaged_location">Zprůměrovaná poloha:</string>
 	<string name="google_maps_link">Odkaz na Google Mapy:</string>
 	<string name="average_altitude">Průměrná výška: </string>
 	<string name="email_footer">Tyto souřadnice byly zaměřeny Androidí appkou \"GPS Averaging\" od Destila</string>

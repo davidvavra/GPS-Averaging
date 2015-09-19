@@ -29,7 +29,8 @@ public class AboutFragment extends BaseFragment implements AboutViewModel.ClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentAboutBinding binding = FragmentAboutBinding.inflate(inflater, container, false);
-        mViewModel = new AboutViewModel(this);
+        mViewModel = new AboutViewModel();
+        mViewModel.setClickListener(this);
         binding.setViewModel(mViewModel);
         return binding.getRoot();
     }

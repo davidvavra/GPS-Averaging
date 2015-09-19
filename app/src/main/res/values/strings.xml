@@ -3,7 +3,7 @@
 
     <!-- Layout -->
     <string name="remove_ads">Remove Ads &amp; More</string>
-    <string name="current_coordinates">Current location:</string>
+    <string name="current_location">Current location:</string>
     <string name="waiting_for_gps">Waiting for GPS …</string>
     <string name="share_by_email">Share by Email</string>
     <string name="export">Export to File</string>
@@ -27,7 +27,7 @@
 
     <!-- Email -->
     <string name="email_subject">Your averaged location</string>
-    <string name="average_coordinates">Averaged location:</string>
+    <string name="averaged_location">Averaged location:</string>
     <string name="google_maps_link">Google Maps link:</string>
     <string name="average_altitude">Averaged altitude:</string>
     <string name="email_footer">These coordinates were measured by Android app "GPS Averaging" created by Destil</string>

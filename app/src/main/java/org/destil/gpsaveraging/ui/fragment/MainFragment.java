@@ -61,8 +61,13 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            mViewModel = new MainFragmentViewModel();
+        } else {
+            mViewModel = (MainFragmentViewModel) savedInstanceState.getSerializable("VIEW_MODEL");
+        }
+        mViewModel.setClickListener(this);
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
-        mViewModel = new MainFragmentViewModel(this);
         mBinding.setViewModel(mViewModel);
         App.component().injectToMainFragment(this);
         mBus.register(this);
@@ -94,6 +99,12 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     public void onDestroyView() {
         mBus.unregister(this);
         super.onDestroyView();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("VIEW_MODEL", mViewModel);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -149,32 +160,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @ShowsRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     void showRationaleForLocation() {
         Snackbar.show(mBinding.coordinator, R.string.location_permission_rationale);
-    }
-
-
-    /**
-     * Restores state after rotation.
-     */
-    private void showCurrentLocation() {
-        mBinding.currentLocation.updateLocation(mGps.getLastLocation());
-        boolean hasMeasurements = mMeasurements.size() > 0;
-        if (!hasMeasurements || mAverager.isRunning()) {
-            mBinding.currentLocation.setVisibility(View.VISIBLE);
-        } else {
-            mBinding.currentLocation.setVisibility(View.GONE);
-        }
-        mBinding.averageLocation.updateLocation(mMeasurements.getAveragedLocation());
-        if (mAverager.isRunning()) {
-            mBinding.averageLocation.setVisibility(View.VISIBLE);
-            mBinding.averageLocation.getActionsView().setVisibility(View.GONE);
-        } else {
-            if (hasMeasurements) {
-                mBinding.averageLocation.setVisibility(View.VISIBLE);
-                mBinding.averageLocation.getActionsView().setVisibility(View.VISIBLE);
-            } else {
-                mBinding.averageLocation.setVisibility(View.GONE);
-            }
-        }
     }
 
     private void startAveraging() {
