@@ -38,7 +38,7 @@ import javax.inject.Singleton;
 @Singleton
 public class Exporter {
 
-    public static final SimpleDateFormat XSD_DATETIME = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    public static final SimpleDateFormat XSD_DATETIME = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US);
     public static final String ACCURACY_SYMBOL = "±";
     public static final String GPX_FILE_NAME = "averaging.gpx";
     public static final String KML_FILE_NAME = "averaging.kml";
@@ -117,16 +117,6 @@ public class Exporter {
     /**
      * Coordinate format to a readable format (degrees - DDD MM.MMM) accuracy.
      */
-    public String formatLatLonWithAccuracy(Location location) {
-        final StringBuilder output = new StringBuilder();
-        final Formatter formatter = new Formatter(output);
-        formatLatLonWithAccuracy(location, formatter, output);
-        return output.toString();
-    }
-
-    /**
-     * Coordinate format to a readable format (degrees - DDD MM.MMM) accuracy.
-     */
     public Appendable formatLatLonWithAccuracy(Location location, Formatter formatter, Appendable output) {
         try {
             formatLatLon(location, formatter, output);
@@ -198,7 +188,7 @@ public class Exporter {
         final File file = new File(storeDirectory, gpx ? GPX_FILE_NAME : KML_FILE_NAME);
         BufferedWriter bw = null;
         try {
-            boolean created = file.createNewFile();
+            file.createNewFile();
             bw = new BufferedWriter(new FileWriter(file));
             if (gpx) {
                 toGPXString(mMeasurements, bw);

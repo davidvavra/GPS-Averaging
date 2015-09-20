@@ -3,9 +3,8 @@ package org.destil.gpsaveraging.dagger;
 import org.destil.gpsaveraging.MainActivity;
 import org.destil.gpsaveraging.measure.PeriodicService;
 import org.destil.gpsaveraging.ui.fragment.AboutFragment;
-import org.destil.gpsaveraging.ui.view.AverageLocationCardView;
-import org.destil.gpsaveraging.ui.view.LocationCardView;
 import org.destil.gpsaveraging.ui.fragment.MainFragment;
+import org.destil.gpsaveraging.ui.view.LocationCardView;
 
 import javax.inject.Singleton;
 

@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|bottom"
                     android:paddingBottom="8dp"
-                    android:paddingEnd="8dp"
+                    android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:text="@{viewModel.measurements}"
                     tools:text="25 measurements"/>

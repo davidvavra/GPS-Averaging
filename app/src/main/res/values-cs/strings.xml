@@ -3,7 +3,7 @@
 	<!-- Layout -->
 	<string name="remove_ads">Bez reklam &amp; více</string>
 	<string name="current_location">Aktuální souřadnice: </string>
-	<string name="waiting_for_gps">Čekám na GPS...</string>
+	<string name="waiting_for_gps">Čekám na GPS…</string>
 	<string name="share_by_email">Sdílet e-mailem</string>
 	<string name="export">Do souboru</string>
 	<string name="you_dont_have_gps_enabled">GPS není povolena</string>

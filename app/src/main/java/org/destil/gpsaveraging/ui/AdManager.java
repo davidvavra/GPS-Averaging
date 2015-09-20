@@ -3,9 +3,6 @@ package org.destil.gpsaveraging.ui;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 public class AdManager {
 
     private final AdView mAdView;

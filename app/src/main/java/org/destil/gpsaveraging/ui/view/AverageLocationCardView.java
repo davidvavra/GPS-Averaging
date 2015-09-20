@@ -1,14 +1,9 @@
 package org.destil.gpsaveraging.ui.view;
 
 import android.content.Context;
-import android.location.Location;
 import android.util.AttributeSet;
 
-import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
-import org.destil.gpsaveraging.measure.Measurements;
-
-import javax.inject.Inject;
 
 /**
  * View displaying average location.

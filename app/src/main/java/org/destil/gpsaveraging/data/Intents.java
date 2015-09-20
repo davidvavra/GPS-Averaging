@@ -41,18 +41,9 @@ public class Intents {
 
     public void showOnMap(Activity activity) {
         try {
-            final StringBuilder uri = new StringBuilder("geo:");
-            uri.append(mMeasurements.getLatitude())
-                    .append(',')
-                    .append(mMeasurements.getLongitude())
-                    .append("?q=")
-                    .append(mMeasurements.getLatitude())
-                    .append(",")
-                    .append(mMeasurements.getLongitude())
-                    .append("(")
-                    .append(activity.getString(R.string.email_subject))
-                    .append(")");
-            final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+            final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + mMeasurements.getLatitude() +
+                    ',' + mMeasurements.getLongitude() + "?q=" + mMeasurements.getLatitude() +
+                    "," + mMeasurements.getLongitude() + "(" + activity.getString(R.string.email_subject) + ")"));
             activity.startActivity(intent);
         } catch (ActivityNotFoundException e) {
             Snackbar.show(activity, R.string.no_app_to_handle);

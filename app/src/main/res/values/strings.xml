@@ -5,22 +5,11 @@
     <string name="remove_ads">Remove Ads &amp; More</string>
     <string name="current_location">Current location:</string>
     <string name="waiting_for_gps">Waiting for GPS …</string>
-    <string name="share_by_email">Share by Email</string>
-    <string name="export">Export to File</string>
-    <string name="you_dont_have_gps_enabled">You don\'t have GPS enabled</string>
     <string name="gps_not_available">GPS not available</string>
     <string name="altitude">Altitude: </string>
     <string name="feet"> ft</string>
-    <string name="stop_averaging">Stop Averaging</string>
-    <string name="start_averaging">Start Averaging</string>
-    <string name="new_averaging">New Averaging</string>
-    <string name="ok">OK</string>
-    <string name="average_location_exported_to_files" formatted="true">Average location exported to directory "%1$s" and files:\nGPX: %2$s\nKML: %3$s</string>
-    <string name="application_cant_write_file" formatted="true">Application can\'t write the file, because: %1$s</string>
-    <string name="cant_create_storage_directory" formatted="true">Application can\'t create directory %1$s.</string>
     <string name="measurements" formatted="true">%1$s measurements</string>
     <string name="satellites_info" formatted="true">%1$s satellites visible</string>
-    <string name="start_averaging_first">Start averaging first</string>
     <string name="averaging_running">GPS Averaging in progress</string>
     <string name="tap_to_control_it">Tap to control it</string>
     <string name="show_on_map">Show on Map</string>
