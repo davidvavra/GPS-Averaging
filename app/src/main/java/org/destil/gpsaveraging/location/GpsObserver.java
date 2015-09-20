@@ -97,7 +97,9 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
             mBus.post(new FirstFixEvent());
         } else {
             hasFix = false;
-            mBus.post(new GpsNotAvailableEvent());
+            if (status == LocationProvider.OUT_OF_SERVICE) {
+                mBus.post(new GpsNotAvailableEvent());
+            }
         }
     }
 

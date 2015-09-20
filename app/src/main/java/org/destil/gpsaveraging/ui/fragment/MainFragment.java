@@ -66,7 +66,9 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         } else {
             mViewModel = (MainFragmentViewModel) savedInstanceState.getSerializable("VIEW_MODEL");
         }
-        mViewModel.setClickListener(this);
+        if (mViewModel != null) {
+            mViewModel.setClickListener(this);
+        }
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mBinding.setViewModel(mViewModel);
         App.component().injectToMainFragment(this);
@@ -177,6 +179,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         mViewModel.isAveraging.set(false);
         mAnimations.hideToTop(mBinding.currentLocation);
         mAnimations.moveUpAndExpand(mBinding.averageLocation);
+        mViewModel.isReadyForSharing.set(true);
         mAverager.stop();
         mIntents.answerToThirdParty(getActivity());
     }

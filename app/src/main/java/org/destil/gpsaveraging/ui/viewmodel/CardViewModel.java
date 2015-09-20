@@ -56,4 +56,9 @@ public class CardViewModel implements Serializable {
 
         void onKmlClicked();
     }
+
+    @Override
+    public String toString() {
+        return title.get();
+    }
 }

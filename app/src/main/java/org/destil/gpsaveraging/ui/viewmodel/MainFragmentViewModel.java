@@ -33,4 +33,14 @@ public class MainFragmentViewModel implements Serializable {
     public interface FabListener {
         void onFabClicked();
     }
+
+    @Override
+    public String toString() {
+        return "MainFragmentViewModel{" +
+                "isReadyForSharing=" + isReadyForSharing.get() +
+                ", hasFix=" + hasFix.get() +
+                ", satelliteInfo=" + satelliteInfo.get() +
+                ", isAveraging=" + isAveraging.get() +
+                '}';
+    }
 }

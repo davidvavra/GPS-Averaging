@@ -56,7 +56,6 @@ public abstract class LocationCardView extends FrameLayout implements CardViewMo
         mViewModel = new CardViewModel();
         initViewModel();
         addView(mBinding.getRoot());
-        // TODO: figure out why rotating single averaged view shows current view
     }
 
     private void initViewModel() {
