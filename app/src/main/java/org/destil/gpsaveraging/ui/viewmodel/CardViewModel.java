@@ -13,10 +13,10 @@ import java.io.Serializable;
  */
 public class CardViewModel implements Serializable {
 
-    public ObservableField<String> title = new ObservableField<>();
-    public ObservableField<String> location = new ObservableField<>();
-    public ObservableField<String> measurements = new ObservableField<>();
-    public ObservableBoolean showActions = new ObservableBoolean();
+    public final ObservableField<String> title = new ObservableField<>();
+    public final ObservableField<String> location = new ObservableField<>();
+    public final ObservableField<String> measurements = new ObservableField<>();
+    public final ObservableBoolean showActions = new ObservableBoolean();
     private transient ClickListener mClickListener;
     public transient View.OnClickListener onShareClick = new View.OnClickListener() {
         @Override

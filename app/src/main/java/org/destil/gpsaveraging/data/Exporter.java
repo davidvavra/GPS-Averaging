@@ -188,6 +188,7 @@ public class Exporter {
         final File file = new File(storeDirectory, gpx ? GPX_FILE_NAME : KML_FILE_NAME);
         BufferedWriter bw = null;
         try {
+            //noinspection ResultOfMethodCallIgnored
             file.createNewFile();
             bw = new BufferedWriter(new FileWriter(file));
             if (gpx) {

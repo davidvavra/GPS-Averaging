@@ -13,8 +13,8 @@ import java.io.Serializable;
  */
 public class AboutViewModel implements Serializable {
 
-    public ObservableField<String> version = new ObservableField<>();
-    public ObservableBoolean showThankYou = new ObservableBoolean();
+    public final ObservableField<String> version = new ObservableField<>();
+    public final ObservableBoolean showThankYou = new ObservableBoolean();
     private transient ClickListener mClickListener;
     public transient View.OnClickListener onMailClick = new View.OnClickListener() {
         @Override
