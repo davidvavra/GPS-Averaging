@@ -64,6 +64,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        App.component().injectToMainFragment(this);
         if (savedInstanceState == null) {
             mViewModel = new MainFragmentViewModel();
         } else {
@@ -74,7 +75,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         }
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mBinding.setViewModel(mViewModel);
-        App.component().injectToMainFragment(this);
         mBus.register(this);
         return mBinding.getRoot();
     }
@@ -92,8 +92,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Override
     public void onStart() {
         super.onStart();
-        mViewModel.hasFix.set(mGps.hasFix());
-        observeGps();
         MainFragmentPermissionsDispatcher.observeGpsWithCheck(this);
     }
 
@@ -134,6 +132,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
 
     @Subscribe
     public void onGpsNotAvailable(GpsNotAvailableEvent e) {
+        mViewModel.hasFix.set(false);
         Snackbar.show(mBinding.coordinator, R.string.gps_not_available);
     }
 

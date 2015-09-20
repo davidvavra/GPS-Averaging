@@ -1,20 +1,18 @@
 package org.destil.gpsaveraging;
 
-import javax.inject.Inject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.squareup.otto.Bus;
 import org.destil.gpsaveraging.base.BaseActivity;
 import org.destil.gpsaveraging.billing.Billing;
-import org.destil.gpsaveraging.location.event.FirstFixEvent;
 import org.destil.gpsaveraging.ui.activity.AboutActivity;
-import org.destil.gpsaveraging.ui.fragment.MainFragment;
 import org.destil.gpsaveraging.ui.activity.SettingsActivity;
+import org.destil.gpsaveraging.ui.fragment.MainFragment;
+
+import javax.inject.Inject;
 
 /**
  * Activity which displays current and averaged location.

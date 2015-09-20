@@ -39,12 +39,10 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
 
     @SuppressWarnings("ResourceType")
     public void start() {
-        if (locationManager == null) {
-            hasFix = false;
-            locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates("gps", 0, 0, this);
-            locationManager.addGpsStatusListener(this);
-        }
+        hasFix = false;
+        locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates("gps", 0, 0, this);
+        locationManager.addGpsStatusListener(this);
     }
 
     @SuppressWarnings("ResourceType")
