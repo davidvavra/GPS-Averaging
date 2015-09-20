@@ -33,7 +33,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * @author Libor Tvrdik (libor.tvrdik@gmail.com), Destil
+ * Performs exporting location into various formats (human-readable, GPX, KML)
+ *
+ * @author David Vávra (david@vavra.me), Libor Tvrdik (libor.tvrdik@gmail.com)
  */
 @Singleton
 public class Exporter {

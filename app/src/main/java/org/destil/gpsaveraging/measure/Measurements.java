@@ -27,8 +27,8 @@ import javax.inject.Singleton;
 /**
  * Group all the measurements. It allows the calculation of the weighted average
  * of the measured values and record times of measurement.
- * 
- * @author Libor Tvrdik (libor.tvrdik@gmail.com), Destil
+ *
+ * @author David Vávra (david@vavra.me), Libor Tvrdik (libor.tvrdik@gmail.com)
  */
 @Singleton
 public class Measurements {

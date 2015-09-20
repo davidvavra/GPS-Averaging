@@ -16,5 +16,10 @@
 
 package org.destil.gpsaveraging.location.event;
 
+/**
+ * This event is fired then the device gets location for the first time.
+ *
+ * @author David Vávra (david@vavra.me)
+ */
 public class FirstFixEvent {
 }

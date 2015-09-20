@@ -29,7 +29,9 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Main Dagger module.
+ * Main Dagger module providing basic dependencies. Other dependencies are created automatically through constructor injection.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 @Module
 public class AppModule {

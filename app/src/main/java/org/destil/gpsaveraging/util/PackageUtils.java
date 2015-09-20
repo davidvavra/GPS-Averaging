@@ -20,7 +20,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 
 /**
- * TODO: add documentation
+ * Utils related to PackageManager.
  *
  * @author David Vávra (david@vavra.me)
  */

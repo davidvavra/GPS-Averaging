@@ -23,6 +23,8 @@ import com.squareup.otto.Bus;
 
 /**
  * Bus working from any thread.
+ *
+ * @author David Vávra (vavra@avast.com)
  */
 public class MainThreadBus extends Bus {
     private final Handler mHandler = new Handler(Looper.getMainLooper());

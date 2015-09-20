@@ -25,6 +25,11 @@ import org.destil.gpsaveraging.dagger.DaggerAppComponent;
 
 import io.fabric.sdk.android.Fabric;
 
+/**
+ * Main application class.
+ *
+ * @author David Vávra (vavra@avast.com)
+ */
 public class App extends Application {
 
     private static AppComponent sComponent;

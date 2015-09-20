@@ -18,6 +18,11 @@ package org.destil.gpsaveraging.measure.event;
 
 import android.location.Location;
 
+/**
+ * This event is fired when there is updated averaged location available.
+ *
+ * @author David Vávra (david@vavra.me)
+ */
 public class AveragedLocationEvent {
     private final Location location;
 

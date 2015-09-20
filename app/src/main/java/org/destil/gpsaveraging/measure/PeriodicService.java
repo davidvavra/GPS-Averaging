@@ -37,6 +37,11 @@ import java.util.TimerTask;
 
 import javax.inject.Inject;
 
+/**
+ * Service which periodically launches averaging in the background.
+ *
+ * @author David Vávra (david@vavra.me)
+ */
 public class PeriodicService extends Service implements LocationListener {
 
     private static final int MEASUREMENT_DELAY = 2000; // delay between

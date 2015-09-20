@@ -24,7 +24,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * App preferences.
+ * Manages persistent storage.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 @Singleton
 public class Preferences {

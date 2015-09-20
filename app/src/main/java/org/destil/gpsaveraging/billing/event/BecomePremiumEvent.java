@@ -17,7 +17,7 @@
 package org.destil.gpsaveraging.billing.event;
 
 /**
- * TODO: add documentation
+ * This event is fired when the user becomes premium.
  *
  * @author David Vávra (david@vavra.me)
  */

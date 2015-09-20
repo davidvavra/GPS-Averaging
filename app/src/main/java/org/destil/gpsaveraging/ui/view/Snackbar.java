@@ -21,7 +21,9 @@ import android.support.annotation.StringRes;
 import android.view.View;
 
 /**
- * Toast utils.
+ * Simple util class for showing a SnackBar.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 public class Snackbar {
     public static void show(View layout, @StringRes int stringRes) {

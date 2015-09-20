@@ -16,5 +16,10 @@
 
 package org.destil.gpsaveraging.location.event;
 
+/**
+ * This event is fired when GPS is not available on the device.
+ *
+ * @author David Vávra (david@vavra.me)
+ */
 public class GpsNotAvailableEvent {
 }

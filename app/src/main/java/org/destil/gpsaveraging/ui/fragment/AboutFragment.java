@@ -39,6 +39,8 @@ import javax.inject.Inject;
 
 /**
  * Fragment displaying about information.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 public class AboutFragment extends BaseFragment implements AboutViewModel.ClickListener {
 

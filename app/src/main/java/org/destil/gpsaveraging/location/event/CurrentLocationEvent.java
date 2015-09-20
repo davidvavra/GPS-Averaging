@@ -18,6 +18,11 @@ package org.destil.gpsaveraging.location.event;
 
 import android.location.Location;
 
+/**
+ * This event is fired when there is a new location available.
+ *
+ * @author David Vávra (david@vavra.me)
+ */
 public class CurrentLocationEvent {
     private final Location location;
 

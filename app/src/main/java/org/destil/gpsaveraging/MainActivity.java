@@ -31,7 +31,7 @@ import org.destil.gpsaveraging.ui.fragment.MainFragment;
 import javax.inject.Inject;
 
 /**
- * Activity which displays current and averaged location.
+ * Main activity doing most of the app's features.
  *
  * @author David Vávra (david@vavra.me)
  */

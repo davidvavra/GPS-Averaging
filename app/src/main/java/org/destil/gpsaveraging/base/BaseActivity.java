@@ -25,7 +25,9 @@ import android.support.v7.widget.Toolbar;
 import org.destil.gpsaveraging.R;
 
 /**
- * Base activity for all others.
+ * Base activity handling common stuff of all.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 public abstract class BaseActivity extends AppCompatActivity {
 

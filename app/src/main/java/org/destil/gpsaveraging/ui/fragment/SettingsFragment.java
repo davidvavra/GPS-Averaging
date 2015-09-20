@@ -26,6 +26,8 @@ import org.destil.gpsaveraging.data.Preferences;
 
 /**
  * Fragment containing preferences.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     // UI elements

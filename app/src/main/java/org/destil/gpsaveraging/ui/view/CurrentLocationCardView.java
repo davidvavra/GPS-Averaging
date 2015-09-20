@@ -23,6 +23,8 @@ import org.destil.gpsaveraging.R;
 
 /**
  * View displaying current location.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 public class CurrentLocationCardView extends LocationCardView {
 

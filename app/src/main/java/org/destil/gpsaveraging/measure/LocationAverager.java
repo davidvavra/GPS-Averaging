@@ -29,7 +29,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Controls the measurements.
+ * Does the actual averaging.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 @Singleton
 public class LocationAverager {

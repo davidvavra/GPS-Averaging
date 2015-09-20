@@ -23,6 +23,8 @@ import org.destil.gpsaveraging.R;
 
 /**
  * View displaying average location.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 public class AverageLocationCardView extends LocationCardView {
 

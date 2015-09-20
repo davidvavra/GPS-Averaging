@@ -38,6 +38,8 @@ import javax.inject.Inject;
 
 /**
  * Card showing a location.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 public abstract class LocationCardView extends FrameLayout implements CardViewModel.ClickListener {
 

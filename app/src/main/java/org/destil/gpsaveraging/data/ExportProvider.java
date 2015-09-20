@@ -27,6 +27,9 @@ import java.io.FileNotFoundException;
 
 /**
  * Content provider which allows reading files from internal storage to other apps.
+ * It's used for sharing files - no need to write them to SD card.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 public class ExportProvider extends ContentProvider {
     public ExportProvider() {

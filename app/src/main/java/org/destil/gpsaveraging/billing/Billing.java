@@ -33,7 +33,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * TODO: add documentation
+ * Manages connection with Google IaB API v3.
  *
  * @author David Vávra (david@vavra.me)
  */

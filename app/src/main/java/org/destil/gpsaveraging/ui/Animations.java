@@ -28,6 +28,11 @@ import org.destil.gpsaveraging.ui.view.LocationCardView;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+/**
+ * Util class for showing various animations.
+ *
+ * @author David Vávra (vavra@avast.com)
+ */
 @Singleton
 public class Animations {
 

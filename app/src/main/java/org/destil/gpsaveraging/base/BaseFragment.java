@@ -19,7 +19,9 @@ package org.destil.gpsaveraging.base;
 import android.support.v4.app.Fragment;
 
 /**
- * Base fragment.
+ * Base fragment handling common stuff for all.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 public class BaseFragment extends Fragment {
 }

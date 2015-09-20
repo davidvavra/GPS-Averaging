@@ -23,7 +23,8 @@ import android.view.View;
 import java.io.Serializable;
 
 /**
- * ViewModel for Main Fragment data binding.
+ * ViewModel for MainFragment, it's used in data binding.
+ * Can be serialized to survive device rotation.
  *
  * @author David Vávra (vavra@avast.com)
  */

@@ -53,7 +53,9 @@ import permissions.dispatcher.RuntimePermissions;
 import permissions.dispatcher.ShowsRationale;
 
 /**
- * Fragment doing main functions of the app.
+ * Fragment containing most of the UI. It listens to events and triggers related components.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 @RuntimePermissions
 public class MainFragment extends BaseFragment implements MainFragmentViewModel.FabListener {

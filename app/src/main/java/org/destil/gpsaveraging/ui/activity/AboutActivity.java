@@ -23,7 +23,7 @@ import org.destil.gpsaveraging.ui.fragment.AboutFragment;
 /**
  * Shows about information, support etc.
  *
- * @author Destil
+ * @author David Vávra (david@vavra.me)
  */
 public class AboutActivity extends BaseActivity {
 

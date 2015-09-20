@@ -19,6 +19,11 @@ package org.destil.gpsaveraging.ui;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+/**
+ * Manages loading ads.
+ *
+ * @author David Vávra (vavra@avast.com)
+ */
 public class AdManager {
 
     private final AdView mAdView;

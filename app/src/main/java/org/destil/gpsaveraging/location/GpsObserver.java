@@ -36,7 +36,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Helper for accessing GPS.
+ * Manages observing GPS location and reporting status.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 @Singleton
 public class GpsObserver implements GpsStatus.Listener, LocationListener {

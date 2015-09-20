@@ -16,6 +16,11 @@
 
 package org.destil.gpsaveraging.location.event;
 
+/**
+ * This event is fired when GPS returned number of satellites.
+ *
+ * @author David Vávra (david@vavra.me)
+ */
 public class SatellitesEvent {
 
     private final int count;

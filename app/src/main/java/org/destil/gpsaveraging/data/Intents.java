@@ -29,7 +29,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Collection of external Intents.
+ * Collection of external Intents for sharing location.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 @Singleton
 public class Intents {

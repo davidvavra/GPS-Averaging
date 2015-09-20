@@ -23,7 +23,7 @@ import org.destil.gpsaveraging.ui.fragment.SettingsFragment;
 /**
  * Settings for units and coordinate format.
  *
- * @author Destil
+ * @author David Vávra (david@vavra.me)
  */
 public class SettingsActivity extends BaseActivity {
 

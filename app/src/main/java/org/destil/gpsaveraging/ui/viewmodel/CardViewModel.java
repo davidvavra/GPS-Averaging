@@ -23,7 +23,8 @@ import android.view.View;
 import java.io.Serializable;
 
 /**
- * TODO: add documentation
+ * ViewModel for LocationCardView, it's used in data binding.
+ * Can be serialized to survive device rotation.
  *
  * @author David Vávra (david@vavra.me)
  */

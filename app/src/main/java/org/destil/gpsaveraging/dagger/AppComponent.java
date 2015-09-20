@@ -27,7 +27,9 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 /**
- * Main Dagger component.
+ * Main Dagger component. Add methods here if you need field injection.
+ *
+ * @author David Vávra (david@vavra.me)
  */
 @Singleton
 @Component(modules = AppModule.class)
