@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translation 'ru'->[ru], progress 84%, master 'strings.xml' -->
+<resources>
+  <string name="remove_ads">Удалить рекламу и открыть новые функции</string>
+  <string name="current_location">Current location:</string>
+  <string name="waiting_for_gps">Ожидание данных GPS&#8230;</string>
+  <string name="gps_not_available">GPS не доступен</string>
+  <string name="altitude">Высота:</string>
+  <string name="feet">ft</string>
+  <string name="measurements">%1$s измерения</string>
+  <string name="satellites_info">%1$s видимых спутников</string>
+  <string name="averaging_running">Инициализация усреднения координат GPS&#8230;</string>
+  <string name="tap_to_control_it">Нажмите на экран для управления</string>
+  <string name="show_on_map">Показать на карте</string>
+  <string name="email_subject">Ваше усредненное местоположение</string>
+  <string name="averaged_location">Усредненное местоположение:</string>
+  <string name="google_maps_link">Ссылка на карты Google Maps: </string>
+  <string name="average_altitude">Усредненная высота:</string>
+  <string name="email_footer">Данные координаты были измерены андроид-приложением \"GPS Averaging\", автор  Destil</string>
+  <string name="settings">Настройки</string>
+  <string name="coordinate_format">Формат координат</string>
+  <string name="units">Единицы измерения</string>
+  <string name="metric">Метрические</string>
+  <string name="imperial">Имперские (США)</string>
+  <string name="about">О приложении</string>
+  <string name="rate_label">Нравится программа?</string>
+  <string name="rate_action">Оценить на Google Play</string>
+  <string name="mail_label">Сообщить о неполадке</string>
+  <string name="mail_action">Написать письмо автору</string>
+  <string name="web_label">Заинтересованы открытым ПО? </string>
+  <string name="web_action">Посетить GitHub</string>
+  <string name="created_by">Разработал</string>
+  <string name="thank_you">Спасибо за поддержку этого приложения!</string>
+  <string name="version">Текущая версия</string>
+  <string name="problem_report">Отчет по проблеме усреднения координат </string>
+  <string name="problem_report_body">Какая у вас модель телефона? \n%1$s\n\nОпишите подробно вашу проблему:\n\n </string>
+  <string name="share">Share</string>
+  <string name="export_to_gpx">Export to GPX file</string>
+  <string name="export_to_kml">Export to KML file</string>
+  <string name="no_app_to_handle">No app to handle this file.</string>
+  <string name="location_permission_rationale">This app needs Location permission for averaging location.</string>
+</resources>

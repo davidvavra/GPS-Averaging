@@ -2,6 +2,17 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.android.databinding'
 apply plugin: 'android-apt'
 apply plugin: 'io.fabric'
+apply plugin: 'android-getlocalization'
+
+getlocalization {
+    user = GETLOCALIZATION_USERNAME
+    password = GETLOCALIZATION_PASSWORD
+    project = "GPSAveraging"
+    iana_codes = [
+            "cs-CZ": "cs",
+            "pl-PL": "pl"
+    ]
+}
 
 android {
     compileSdkVersion 23

@@ -11,6 +11,7 @@ buildscript {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
         classpath 'io.fabric.tools:gradle:1.19.2'
         classpath "com.android.databinding:dataBinder:1.0-rc1"
+        classpath 'org.zooper.gradle:gradle-getlocalization-plugin:1.2'
     }
 }
 

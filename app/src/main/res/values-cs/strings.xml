@@ -1,51 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translation 'cs-CZ'->[Ljava.lang.String;@38d8d11c, progress 100%, master 'strings.xml' -->
 <resources>
-	<!-- Layout -->
-	<string name="remove_ads">Bez reklam &amp; více</string>
-	<string name="current_location">Aktuální souřadnice: </string>
-	<string name="waiting_for_gps">Čekám na GPS…</string>
-	<string name="share_by_email">Sdílet e-mailem</string>
-	<string name="export">Do souboru</string>
-	<string name="you_dont_have_gps_enabled">GPS není povolena</string>
-	<string name="gps_not_available">GPS nedostupná</string>
-	<string name="altitude">Výška: </string>
-	<string name="feet">ft</string>
-	<string name="stop_averaging">Zastavit průměrování</string>
-	<string name="start_averaging">Spustit průměrování</string>
-	<string name="new_averaging">Nové průměrování</string>
-	<string name="ok">OK</string>
-	<string formatted="true" name="average_location_exported_to_files">Průměrná poloha byla exportována do složky \"%1$s\" a souborů:\nGPX: %2$s\nKML: %3$s</string>
-	<string formatted="true" name="application_cant_write_file">Aplikace nemůže zapisovat do souboru, protože: %1$s</string>
-	<string formatted="true" name="cant_create_storage_directory">Aplikace nemůže vytvořit složku %1$s.</string>
-	<string formatted="true" name="measurements">%1$s měření</string>
-	<string formatted="true" name="satellites_info">%1$s viditelných satelitů</string>
-	<string name="start_averaging_first">Nejdřív zapněte průměrování</string>
-	<string name="averaging_running">Probíhá průměrování GPS</string>
-	<string name="tap_to_control_it">Tapněte pro zastavení</string>
-	<string name="show_on_map">Ukázat na mapě</string>
-	<!-- Email -->
-	<string name="email_subject">Vaše zprůměrovaná poloha</string>
-	<string name="averaged_location">Zprůměrovaná poloha:</string>
-	<string name="google_maps_link">Odkaz na Google Mapy:</string>
-	<string name="average_altitude">Průměrná výška: </string>
-	<string name="email_footer">Tyto souřadnice byly zaměřeny Androidí appkou \"GPS Averaging\" od Destila</string>
-	<!-- Settings -->
-	<string name="settings">Nastavení</string>
-	<string name="coordinate_format">Formát souřadnic</string>
-	<string name="units">Formát jednotek</string>
-	<string name="metric">Metrický</string>
-	<string name="imperial">Amerikánský</string>
-	<!-- About -->
-	<string name="about">O aplikaci</string>
-	<string name="rate_label">Líbí se GPS Averaging?</string>
-	<string name="rate_action">Ohodnoťte na Google Play</string>
-	<string name="mail_label">Problémy?</string>
-	<string name="mail_action">Nahlašte je emailem</string>
-	<string name="web_label">Zajímá Vás open-source, API?</string>
-	<string name="web_action">Navštivte GitHub</string>
-	<string name="created_by">Vytvořil</string>
-	<string name="thank_you">Děkuji za podporu aplikace!</string>
-	<string name="version">Verze</string>
-	<string name="problem_report">Problém s aplikací GPS Averaging</string>
-	<string name="problem_report_body">Jaký máte telefon?\n%1$s\n\nPopište detailně svůj problém:\n\n</string>
+  <string name="remove_ads">Bez reklam &amp; více</string>
+  <string name="current_location">Aktuální poloha:</string>
+  <string name="waiting_for_gps">Čekám na GPS&#8230;</string>
+  <string name="gps_not_available">GPS nedostupná</string>
+  <string name="altitude">Výška: </string>
+  <string name="feet"> ft</string>
+  <string name="measurements">%1$s měření</string>
+  <string name="satellites_info">%1$s viditelných satelitů</string>
+  <string name="averaging_running">Probíhá průměrování GPS</string>
+  <string name="tap_to_control_it">Tapněte pro zastavení</string>
+  <string name="show_on_map">Ukázat na mapě</string>
+  <string name="email_subject">Vaše zprůměrovaná poloha</string>
+  <string name="averaged_location">Zprůměrovaná poloha:</string>
+  <string name="google_maps_link">Odkaz na Google Mapy:</string>
+  <string name="average_altitude">Průměrná výška: </string>
+  <string name="email_footer">Tyto souřadnice byly zaměřeny Androidí appkou \"GPS Averaging\" od Destila</string>
+  <string name="settings">Nastavení</string>
+  <string name="coordinate_format">Formát souřadnic</string>
+  <string name="units">Formát jednotek</string>
+  <string name="metric">Metrický</string>
+  <string name="imperial">Amerikánský</string>
+  <string name="about">O aplikaci</string>
+  <string name="rate_label">Líbí se GPS Averaging?</string>
+  <string name="rate_action">Ohodnoťte na Google Play</string>
+  <string name="mail_label">Problémy?</string>
+  <string name="mail_action">Nahlašte je emailem</string>
+  <string name="web_label">Zajímá Vás open-source, API?</string>
+  <string name="web_action">Navštivte GitHub</string>
+  <string name="created_by">Vytvořil</string>
+  <string name="thank_you">Děkuji za podporu aplikace!</string>
+  <string name="version">Verze</string>
+  <string name="problem_report">Problém s aplikací GPS Averaging</string>
+  <string name="problem_report_body">Jaký máte telefon?\n%1$s\n\nPopište detailně svůj problém:\n\n</string>
+  <string name="share">Sdílet </string>
+  <string name="export_to_gpx">Exportovat do GPX </string>
+  <string name="export_to_kml">Exportovat do KML</string>
+  <string name="no_app_to_handle">Nemáte žádnou aplikaci, která umí tento soubor otevřít.</string>
+  <string name="location_permission_rationale">Tato aplikace potřebuje právo na vaší polohu, aby jí mohla průměrovat.</string>
 </resources>

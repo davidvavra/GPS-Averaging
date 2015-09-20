@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translation 'pl-PL'->[Ljava.lang.String;@55ed1142, progress 84%, master 'strings.xml' -->
+<resources>
+  <string name="remove_ads">Usuń reklamy i więcej</string>
+  <string name="current_location">Current location:</string>
+  <string name="waiting_for_gps">Oczekiwanie na GPS&#8230;</string>
+  <string name="gps_not_available">GPS niedostępny</string>
+  <string name="altitude">Wysokość:</string>
+  <string name="feet">stóp</string>
+  <string name="measurements">%1$s pomiarów</string>
+  <string name="satellites_info">%1$s widocznych satelit</string>
+  <string name="averaging_running">Uśrednianie GPS w trakcie</string>
+  <string name="tap_to_control_it">Puknij by przejąć kontrolę</string>
+  <string name="show_on_map">Pokaż na mapie</string>
+  <string name="email_subject">Twoja uśredniona lokalizacja</string>
+  <string name="averaged_location">Uśredniona lokalizacja:</string>
+  <string name="google_maps_link">Link do Google Maps:</string>
+  <string name="average_altitude">Uśredniona wysokość:</string>
+  <string name="email_footer">Te współrzędne zostały zmierzone przez aplikację \"GPS Averaging\" na Adroida, stworzoną  przez Destil</string>
+  <string name="settings">Ustawienia</string>
+  <string name="coordinate_format">Format współrzędnych</string>
+  <string name="units">Jednostki</string>
+  <string name="metric">Metryczne</string>
+  <string name="imperial">Imperialistyczne (US)</string>
+  <string name="about">Informacje</string>
+  <string name="rate_label">Podoba ci się GPS Averaging?</string>
+  <string name="rate_action">Oceń w Google Play</string>
+  <string name="mail_label">Problemy?</string>
+  <string name="mail_action">Wyślij do nas email</string>
+  <string name="web_label">Interesujesz się open-source, API?</string>
+  <string name="web_action">Odwiedź GitHub</string>
+  <string name="created_by">Stworzone przez</string>
+  <string name="thank_you">Dziękuję za wspieranie tej aplikacji!</string>
+  <string name="version">Wersja</string>
+  <string name="problem_report">Raportowanie problemów z GPS Averaging</string>
+  <string name="problem_report_body">Jaki telefon posiadasz?\n%1$s\n\nOpisz w szczegółach swoj problem:\n\n</string>
+  <string name="share">Share</string>
+  <string name="export_to_gpx">Export to GPX file</string>
+  <string name="export_to_kml">Export to KML file</string>
+  <string name="no_app_to_handle">No app to handle this file.</string>
+  <string name="location_permission_rationale">This app needs Location permission for averaging location.</string>
+</resources>
