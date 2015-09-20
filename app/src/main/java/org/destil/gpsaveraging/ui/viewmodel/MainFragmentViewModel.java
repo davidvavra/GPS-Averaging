@@ -18,6 +18,7 @@ public class MainFragmentViewModel implements Serializable {
     public final ObservableField<String> satelliteInfo = new ObservableField<>();
     public final ObservableBoolean isAveraging = new ObservableBoolean();
     public final ObservableBoolean isReadyForSharing = new ObservableBoolean();
+    public final ObservableBoolean showAd = new ObservableBoolean();
     private transient FabListener mClickListener;
     public final transient View.OnClickListener onFabClick = new View.OnClickListener() {
         @Override

@@ -92,6 +92,7 @@
             android:id="@+id/ad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showAd ? View.VISIBLE : View.GONE}"
             android:layout_gravity="bottom"
             app:adSize="SMART_BANNER"
             app:adUnitId="@string/admob_ad_id"/>

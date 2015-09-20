@@ -14,6 +14,8 @@ import com.squareup.otto.Subscribe;
 import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.base.BaseFragment;
+import org.destil.gpsaveraging.billing.Billing;
+import org.destil.gpsaveraging.billing.event.BecomePremiumEvent;
 import org.destil.gpsaveraging.data.Intents;
 import org.destil.gpsaveraging.databinding.FragmentMainBinding;
 import org.destil.gpsaveraging.location.GpsObserver;
@@ -53,8 +55,9 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Inject
     Intents mIntents;
     @Inject
-    AdManager mAdManager;
+    Billing mBilling;
 
+    private AdManager mAdManager;
     private MainFragmentViewModel mViewModel;
     private FragmentMainBinding mBinding;
 
@@ -79,7 +82,11 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAdManager.load(mBinding.ad);
+        mAdManager = new AdManager(mBinding.ad);
+        if (!mBilling.isFullVersion()) {
+            mViewModel.showAd.set(true);
+            mAdManager.load();
+        }
     }
 
     @Override
@@ -100,6 +107,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Override
     public void onDestroyView() {
         mBus.unregister(this);
+        mAdManager.destroy();
         super.onDestroyView();
     }
 
@@ -142,6 +150,12 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Subscribe
     public void onAverageLocation(AveragedLocationEvent e) {
         mBinding.averageLocation.updateLocation(e.getLocation());
+    }
+
+    @Subscribe
+    public void onBecomePremium(BecomePremiumEvent e) {
+        mViewModel.showAd.set(false);
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override

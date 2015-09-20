@@ -25,6 +25,7 @@ public class Preferences {
     public static final String COORDS_DEFAULT_VALUE = COORDS_MINUTES;
     public static final String[] COORDS_VALUES = {COORDS_DECIMAL, COORDS_MINUTES, COORDS_SECONDS};
     public static final String[] COORDS_OPTIONS = {"dd.ddddd", "N dd° mm.mmm'", "N dd° mm' ss.sss''"};
+    public static final String FULL_VERSION = "full_version";
 
     private final Context mContext;
 
@@ -47,8 +48,26 @@ public class Preferences {
         return getString(COORDINATE_FORMAT, COORDS_DEFAULT_VALUE);
     }
 
+    public void setFullVersion(boolean isFullVersion) {
+        set(FULL_VERSION, isFullVersion);
+    }
+
+    public boolean isFullVersion() {
+        return getBoolean(FULL_VERSION);
+    }
+
     private String getString(String key, String defaultValue) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         return prefs.getString(key, defaultValue);
+    }
+
+    private boolean getBoolean(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return prefs.getBoolean(key, false);
+    }
+
+    private void set(String key, boolean value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        prefs.edit().putBoolean(key, value).apply();
     }
 }

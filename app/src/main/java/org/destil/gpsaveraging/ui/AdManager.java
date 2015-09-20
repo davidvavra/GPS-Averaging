@@ -6,14 +6,15 @@ import com.google.android.gms.ads.AdView;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 public class AdManager {
 
-    @Inject
-    public AdManager() {
+    private final AdView mAdView;
+
+    public AdManager(AdView adView) {
+        mAdView = adView;
     }
 
-    public void load(AdView adView) {
+    public void load() {
         AdRequest.Builder builder = new AdRequest.Builder();
         builder.addKeyword("geocaching");
         builder.addKeyword("gps");
@@ -25,6 +26,10 @@ public class AdManager {
         builder.addTestDevice("197CB241DBFB335DD54A6D050DE58792"); // My N5
         builder.addTestDevice("996EE7E77D7181208AF916072F5FFE4C"); // My N5#2
         builder.addTestDevice("622AFF2BE01381DB65A2ACAE09D77ABD"); // Genymotion
-        adView.loadAd(builder.build());
+        mAdView.loadAd(builder.build());
+    }
+
+    public void destroy() {
+        mAdView.destroy();
     }
 }
