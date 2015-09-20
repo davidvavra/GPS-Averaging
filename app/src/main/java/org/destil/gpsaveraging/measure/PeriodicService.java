@@ -69,7 +69,13 @@ public class PeriodicService extends Service implements LocationListener {
         // start averaging
         startPeriodicMeasurements();
         // keep GPS running
-        mLocationManager.requestLocationUpdates("gps", 0, 0, this);
+        try {
+            mLocationManager.requestLocationUpdates("gps", 0, 0, this);
+        } catch (SecurityException e) {
+            // User has disabled location permission in settings while averaging.
+            stopSelf();
+            return START_NOT_STICKY;
+        }
         return START_STICKY;
     }
 
