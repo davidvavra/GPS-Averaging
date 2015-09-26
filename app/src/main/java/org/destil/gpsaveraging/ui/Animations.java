@@ -66,12 +66,6 @@ public class Animations {
         animate(view).alpha(0).translationY(-view.getHeight());
     }
 
-    public static void hideToBottom(View view) {
-        view.setAlpha(1);
-        view.setTranslationY(0);
-        animate(view).alpha(0).translationY(view.getHeight());
-    }
-
     public static void moveToBottom(View view) {
         view.setTranslationY(-view.getHeight());
         animate(view).translationY(0);

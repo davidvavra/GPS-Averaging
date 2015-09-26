@@ -179,7 +179,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     public void onBecomePremium(BecomePremiumEvent e) {
         if (mViewModel.showAd) {
             mViewModel.showAd = false;
-            Animations.hideToBottom(mBinding.ad);
+            mBinding.ad.setVisibility(View.GONE);
         }
         getActivity().invalidateOptionsMenu();
     }
