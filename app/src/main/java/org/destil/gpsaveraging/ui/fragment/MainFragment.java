@@ -90,6 +90,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         }
         if (mViewModel != null) {
             mViewModel.setClickListener(this);
+            Log.d("viewModel", mViewModel.toString());
         }
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mBinding.setViewModel(mViewModel);
@@ -120,7 +121,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         super.onStop();
     }
 
-
     @Override
     public void onDestroyView() {
         mBus.unregister(this);
@@ -141,10 +141,12 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
 
     @Subscribe
     public void onFirstFix(FirstFixEvent e) {
-        mViewModel.hasFix = true;
-        Animations.hide(mBinding.progress);
-        Animations.showFromTop(mBinding.currentLocation);
-        Animations.showFromBottom(mBinding.fab);
+        if (!mViewModel.hasFix) {
+            mViewModel.hasFix = true;
+            Animations.hide(mBinding.progress);
+            Animations.showFromTop(mBinding.currentLocation);
+            Animations.showFromBottom(mBinding.fab);
+        }
     }
 
     @Subscribe
@@ -170,7 +172,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
 
     @Subscribe
     public void onBecomePremium(BecomePremiumEvent e) {
-        Log.d("Animations", "become premium");
         if (mViewModel.showAd) {
             mViewModel.showAd = false;
             Animations.hideToBottom(mBinding.ad);
@@ -203,6 +204,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         mViewModel.isAveraging = true;
         mViewModel.stopIcon.set(true);
         if (mViewModel.isReadyForSharing) {
+            mViewModel.isReadyForSharing = false;
             mBinding.averageLocation.collapse(new Animations.AnimationEndCallback() {
                 @Override
                 public void onAnimationEnd() {
