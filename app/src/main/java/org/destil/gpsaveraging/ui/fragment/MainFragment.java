@@ -17,10 +17,10 @@
 package org.destil.gpsaveraging.ui.fragment;
 
 import android.Manifest;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +90,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         }
         if (mViewModel != null) {
             mViewModel.setClickListener(this);
-            Log.d("viewModel", mViewModel.toString());
         }
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mBinding.setViewModel(mViewModel);
@@ -209,7 +208,9 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
                 @Override
                 public void onAnimationEnd() {
                     Animations.showFromTop(mBinding.currentLocation);
-                    Animations.moveToBottom(mBinding.averageLocation);
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        Animations.moveToBottom(mBinding.averageLocation);
+                    }
                 }
             });
         } else {
@@ -224,11 +225,16 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         mViewModel.stopIcon.set(false);
         mIntents.answerToThirdParty(getActivity());
         Animations.hideToTop(mBinding.currentLocation);
-        Animations.moveToTop(mBinding.averageLocation, new Animations.AnimationEndCallback() {
-            @Override
-            public void onAnimationEnd() {
-                mBinding.averageLocation.expand();
-            }
-        });
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Animations.moveToTop(mBinding.averageLocation, new Animations.AnimationEndCallback() {
+                @Override
+                public void onAnimationEnd() {
+                    mBinding.averageLocation.expand();
+                }
+            });
+        } else {
+            mBinding.averageLocation.expand();
+            mBinding.currentLocation.setVisibility(View.GONE);
+        }
     }
 }
