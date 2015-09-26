@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="org.destil.gpsaveraging.ui.viewmodel.AboutViewModel"/>
-
-        <import type="android.view.View" />
     </data>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -39,10 +39,10 @@
             </TextView>
 
             <Button
-                android:onClick="@{viewModel.onMailClick}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
+                android:onClick="@{viewModel.onMailClick}"
                 android:text="@string/mail_action"/>
 
             <TextView
@@ -53,24 +53,24 @@
             </TextView>
 
             <Button
-                android:onClick="@{viewModel.onGithubClick}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
+                android:onClick="@{viewModel.onGithubClick}"
                 android:text="@string/web_action"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
-                android:visibility="@{viewModel.showThankYou ? View.VISIBLE : View.GONE}"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:visible="@{viewModel.showThankYou}">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="3dp"
                     android:layout_marginEnd="3dp"
+                    android:layout_marginRight="3dp"
                     android:text="@string/heart"
                     android:textColor="#cc0000"/>
 

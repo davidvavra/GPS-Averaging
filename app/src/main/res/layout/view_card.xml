@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
             type="org.destil.gpsaveraging.ui.viewmodel.CardViewModel"/>
-
-        <import type="android.view.View" />
     </data>
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v7.widget.CardView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="8dp"
@@ -69,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="@{viewModel.showActions ? View.VISIBLE : View.GONE}"
+                app:visible="@{viewModel.showActions}"
                 android:paddingBottom="8dp">
 
                 <View

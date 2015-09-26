@@ -8,8 +8,6 @@
         <variable
             name="viewModel"
             type="org.destil.gpsaveraging.ui.viewmodel.MainFragmentViewModel"/>
-
-        <import type="android.view.View"/>
     </data>
 
     <LinearLayout
@@ -28,7 +26,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="@{viewModel.hasFix ? View.GONE : View.VISIBLE}">
+                app:visible="@{!viewModel.hasFix}">
 
                 <ProgressBar
                     style="?android:attr/android:progressBarStyle"
@@ -58,19 +56,19 @@
                 android:layout_height="match_parent"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:visibility="@{viewModel.hasFix ? View.VISIBLE : View.GONE}">
+                app:visible="@{viewModel.hasFix}">
 
                 <android.support.percent.PercentRelativeLayout style="@style/CardsLayout">
 
                     <org.destil.gpsaveraging.ui.view.CurrentLocationCardView
                         android:id="@+id/current_location"
                         style="@style/Card"
-                        android:visibility="@{viewModel.hasFix &amp;&amp; !viewModel.isReadyForSharing ? View.VISIBLE : View.GONE}"/>
+                        app:visible="@{viewModel.hasFix &amp;&amp; !viewModel.isReadyForSharing}"/>
 
                     <org.destil.gpsaveraging.ui.view.AverageLocationCardView
                         android:id="@+id/average_location"
                         style="@style/Card.Second"
-                        android:visibility="@{viewModel.isAveraging || viewModel.isReadyForSharing ? View.VISIBLE : View.GONE}"/>
+                        app:visible="@{viewModel.isAveraging || viewModel.isReadyForSharing}"/>
 
                 </android.support.percent.PercentRelativeLayout>
 
@@ -84,7 +82,7 @@
                 android:layout_margin="@dimen/fab_margin"
                 android:onClick="@{viewModel.onFabClick}"
                 android:src="@{viewModel.isAveraging ? @drawable/ic_stop : @drawable/ic_record}"
-                android:visibility="@{viewModel.hasFix ? View.VISIBLE : View.GONE}"/>
+                app:visible="@{viewModel.hasFix}"/>
 
         </android.support.design.widget.CoordinatorLayout>
 
@@ -92,7 +90,7 @@
             android:id="@+id/ad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.showAd ? View.VISIBLE : View.GONE}"
+            app:visible="@{viewModel.showAd}"
             android:layout_gravity="bottom"
             app:adSize="SMART_BANNER"
             app:adUnitId="@string/admob_ad_id"/>
