@@ -90,6 +90,12 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         }
         if (mViewModel != null) {
             mViewModel.setClickListener(this);
+            // if averaging is running in background and android doesn't keep the activity
+            if (mAverager.isRunning()) {
+                mViewModel.hasFix = true;
+                mViewModel.isAveraging = true;
+                mViewModel.stopIcon.set(true);
+            }
         }
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
         mBinding.setViewModel(mViewModel);
