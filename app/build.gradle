@@ -62,6 +62,7 @@ getlocalization {
     project = "GPSAveraging"
     iana_codes = [
             "cs-CZ": "cs",
-            "pl-PL": "pl"
+            "pl-PL": "pl",
+            "sl-SI": "sl"
     ]
 }

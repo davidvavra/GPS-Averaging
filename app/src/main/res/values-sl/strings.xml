@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Translation 'sl-SI'->[Ljava.lang.String;@69a693a, progress 100%, master 'strings.xml' -->
+<resources>
+  <string name="remove_ads">Odstrani oglase in drugo</string>
+  <string name="current_location">Trenutna lega:</string>
+  <string name="waiting_for_gps">Čakanje na GPS &#8230;</string>
+  <string name="gps_not_available">GPS-a ni na voljo</string>
+  <string name="altitude">Nadmorska višina:</string>
+  <string name="feet">čevlji</string>
+  <string name="measurements">%1$s meritev</string>
+  <string name="satellites_info">%1$s vidnih satelitov</string>
+  <string name="averaging_running">GPS povprečenje v teku</string>
+  <string name="tap_to_control_it">Dotaknite se za nadzor</string>
+  <string name="show_on_map">Prikaži na zamljevidu</string>
+  <string name="email_subject">Vaša povprečena lega</string>
+  <string name="averaged_location">Povprečena lega:</string>
+  <string name="google_maps_link">Povezava na Google Maps:</string>
+  <string name="average_altitude">Povprečena nadmorska višina:</string>
+  <string name="email_footer">Te koordinate so bile izmerjene z Android aplikacijo \"GPS Averaging\", avtor katere je DESTIL</string>
+  <string name="settings">Nastavitve</string>
+  <string name="coordinate_format">Oblika koordinat</string>
+  <string name="units">Merske enote</string>
+  <string name="metric">Metrični sistem</string>
+  <string name="imperial">Imperialni sistem (ZDA)</string>
+  <string name="about">O</string>
+  <string name="rate_label">Vam je všeč GPS Averaging?</string>
+  <string name="rate_action">Ocenite v storitvi Google Play</string>
+  <string name="mail_label">Problemi?</string>
+  <string name="mail_action">Pošlji e-sporočilo s povratnimi informacijami</string>
+  <string name="web_label">Vas zanimajo odprta koda, API?</string>
+  <string name="web_action">Obiščite GitHub</string>
+  <string name="created_by">Avtor</string>
+  <string name="thank_you">Zahvaljujemo se vam za podporo tej aplikaciji!</string>
+  <string name="version">Različica</string>
+  <string name="problem_report">Poročilo o težavi GPS Averaging</string>
+  <string name="problem_report_body">Kakšen telefon imate?\n%1$s\n\nNatančno opišete težave:\n\n</string>
+  <string name="share">Deli</string>
+  <string name="export_to_gpx">Izvozi v GPX datoteko</string>
+  <string name="export_to_kml">Izvozi v KML datoteko</string>
+  <string name="no_app_to_handle">Ni aplikacije za obravnavo te datoteke.</string>
+  <string name="location_permission_rationale">Ta aplikacija potrebuje dovoljenje Lokacije za povprečenje lege.</string>
+</resources>
