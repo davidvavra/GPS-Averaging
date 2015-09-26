@@ -81,8 +81,10 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
             return;
         }
         if (event == GpsStatus.GPS_EVENT_FIRST_FIX) {
-            hasFix = true;
-            mBus.post(new FirstFixEvent());
+            if (!hasFix) {
+                hasFix = true;
+                mBus.post(new FirstFixEvent());
+            }
         } else if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
             GpsStatus gpsStatus = locationManager.getGpsStatus(null);
             int all = 0;
@@ -109,8 +111,10 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         if (status == LocationProvider.AVAILABLE) {
-            hasFix = true;
-            mBus.post(new FirstFixEvent());
+            if (!hasFix) {
+                hasFix = true;
+                mBus.post(new FirstFixEvent());
+            }
         } else {
             hasFix = false;
             if (status == LocationProvider.OUT_OF_SERVICE) {

@@ -33,7 +33,7 @@ public class CardViewModel implements Serializable {
     public final ObservableField<String> title = new ObservableField<>();
     public final ObservableField<String> location = new ObservableField<>();
     public final ObservableField<String> measurements = new ObservableField<>();
-    public final ObservableBoolean showActions = new ObservableBoolean();
+    public boolean showActions;
     private transient ClickListener mClickListener;
     public transient View.OnClickListener onShareClick = new View.OnClickListener() {
         @Override

@@ -32,6 +32,7 @@ import org.destil.gpsaveraging.data.Exporter;
 import org.destil.gpsaveraging.data.Intents;
 import org.destil.gpsaveraging.databinding.ViewCardBinding;
 import org.destil.gpsaveraging.measure.Measurements;
+import org.destil.gpsaveraging.ui.Animations;
 import org.destil.gpsaveraging.ui.viewmodel.CardViewModel;
 
 import javax.inject.Inject;
@@ -134,15 +135,13 @@ public abstract class LocationCardView extends FrameLayout implements CardViewMo
         }
     }
 
-    public View getActionsView() {
-        return mBinding.actions;
+    public void expand() {
+        mViewModel.showActions = true;
+        Animations.expand(mBinding.actions);
     }
 
-    public void setExpanded() {
-        mViewModel.showActions.set(true);
-    }
-
-    public void setCollapsed() {
-        mViewModel.showActions.set(false);
+    public void collapse(Animations.AnimationEndCallback callback) {
+        mViewModel.showActions = false;
+        Animations.collapse(mBinding.actions, callback);
     }
 }

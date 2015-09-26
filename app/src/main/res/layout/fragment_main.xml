@@ -22,6 +22,7 @@
             android:layout_weight="1">
 
             <LinearLayout
+                android:id="@+id/progress"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -53,10 +54,7 @@
             <ScrollView
                 android:id="@+id/cards"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                app:visible="@{viewModel.hasFix}">
+                android:layout_height="match_parent">
 
                 <android.support.percent.PercentRelativeLayout style="@style/CardsLayout">
 
@@ -81,7 +79,7 @@
                 android:layout_gravity="end|bottom"
                 android:layout_margin="@dimen/fab_margin"
                 android:onClick="@{viewModel.onFabClick}"
-                android:src="@{viewModel.isAveraging ? @drawable/ic_stop : @drawable/ic_record}"
+                android:src="@{viewModel.stopIcon ? @drawable/ic_stop : @drawable/ic_record}"
                 app:visible="@{viewModel.hasFix}"/>
 
         </android.support.design.widget.CoordinatorLayout>
@@ -90,10 +88,10 @@
             android:id="@+id/ad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:visible="@{viewModel.showAd}"
             android:layout_gravity="bottom"
             app:adSize="SMART_BANNER"
-            app:adUnitId="@string/admob_ad_id"/>
+            app:adUnitId="@string/admob_ad_id"
+            app:visible="@{viewModel.showAd}"/>
     </LinearLayout>
 
 </layout>

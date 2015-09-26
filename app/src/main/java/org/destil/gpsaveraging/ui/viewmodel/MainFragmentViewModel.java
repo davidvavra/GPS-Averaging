@@ -18,6 +18,7 @@ package org.destil.gpsaveraging.ui.viewmodel;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import java.io.Serializable;
@@ -31,11 +32,12 @@ import java.io.Serializable;
 
 public class MainFragmentViewModel implements Serializable {
 
-    public final ObservableBoolean hasFix = new ObservableBoolean();
+    public boolean hasFix;
+    public boolean isAveraging;
+    public boolean isReadyForSharing;
+    public boolean showAd;
     public final ObservableField<String> satelliteInfo = new ObservableField<>();
-    public final ObservableBoolean isAveraging = new ObservableBoolean();
-    public final ObservableBoolean isReadyForSharing = new ObservableBoolean();
-    public final ObservableBoolean showAd = new ObservableBoolean();
+    public final ObservableBoolean stopIcon =  new ObservableBoolean();
     private transient FabListener mClickListener;
     public final transient View.OnClickListener onFabClick = new View.OnClickListener() {
         @Override
@@ -55,10 +57,10 @@ public class MainFragmentViewModel implements Serializable {
     @Override
     public String toString() {
         return "MainFragmentViewModel{" +
-                "isReadyForSharing=" + isReadyForSharing.get() +
-                ", hasFix=" + hasFix.get() +
-                ", satelliteInfo=" + satelliteInfo.get() +
-                ", isAveraging=" + isAveraging.get() +
+                "isReadyForSharing=" + isReadyForSharing +
+                ", hasFix=" + hasFix +
+                ", satelliteInfo=" + satelliteInfo +
+                ", isAveraging=" + isAveraging +
                 '}';
     }
 }

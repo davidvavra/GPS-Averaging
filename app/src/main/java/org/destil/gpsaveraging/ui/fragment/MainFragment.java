@@ -20,6 +20,7 @@ import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ import org.destil.gpsaveraging.ui.view.Snackbar;
 import org.destil.gpsaveraging.ui.viewmodel.MainFragmentViewModel;
 
 import javax.inject.Inject;
+
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import permissions.dispatcher.ShowsRationale;
@@ -64,8 +66,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     Bus mBus;
     @Inject
     GpsObserver mGps;
-    @Inject
-    Animations mAnimations;
     @Inject
     Measurements mMeasurements;
     @Inject
@@ -102,7 +102,8 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         super.onViewCreated(view, savedInstanceState);
         mAdManager = new AdManager(mBinding.ad);
         if (!mBilling.isFullVersion()) {
-            mViewModel.showAd.set(true);
+            mViewModel.showAd = true;
+            Animations.showFromBottom(mBinding.ad);
             mAdManager.load();
         }
     }
@@ -140,17 +141,15 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
 
     @Subscribe
     public void onFirstFix(FirstFixEvent e) {
-        mViewModel.hasFix.set(true);
-        if (mBinding.cards.getVisibility() == View.GONE) {
-            mBinding.averageLocation.setVisibility(View.GONE);
-            mAnimations.showFromTop(mBinding.cards);
-            mAnimations.showFromTop(mBinding.fab);
-        }
+        mViewModel.hasFix = true;
+        Animations.hide(mBinding.progress);
+        Animations.showFromTop(mBinding.currentLocation);
+        Animations.showFromBottom(mBinding.fab);
     }
 
     @Subscribe
     public void onGpsNotAvailable(GpsNotAvailableEvent e) {
-        mViewModel.hasFix.set(false);
+        mViewModel.hasFix = false;
         Snackbar.show(mBinding.coordinator, R.string.gps_not_available);
     }
 
@@ -171,7 +170,11 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
 
     @Subscribe
     public void onBecomePremium(BecomePremiumEvent e) {
-        mViewModel.showAd.set(false);
+        Log.d("Animations", "become premium");
+        if (mViewModel.showAd) {
+            mViewModel.showAd = false;
+            Animations.hideToBottom(mBinding.ad);
+        }
         getActivity().invalidateOptionsMenu();
     }
 
@@ -196,22 +199,34 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     }
 
     private void startAveraging() {
-        mViewModel.isAveraging.set(true);
-        if (mBinding.currentLocation.getVisibility() == View.GONE) {
-            mAnimations.collapseAndMoveDown(mBinding.averageLocation, mBinding.currentLocation);
-        } else {
-            mBinding.averageLocation.setVisibility(View.VISIBLE); // animation doesn't work otherwise
-            mAnimations.showFromTop(mBinding.averageLocation);
-        }
         mAverager.start();
+        mViewModel.isAveraging = true;
+        mViewModel.stopIcon.set(true);
+        if (mViewModel.isReadyForSharing) {
+            mBinding.averageLocation.collapse(new Animations.AnimationEndCallback() {
+                @Override
+                public void onAnimationEnd() {
+                    Animations.showFromTop(mBinding.currentLocation);
+                    Animations.moveToBottom(mBinding.averageLocation);
+                }
+            });
+        } else {
+            Animations.showFromBottom(mBinding.averageLocation);
+        }
     }
 
     private void stopAveraging() {
-        mViewModel.isAveraging.set(false);
-        mAnimations.hideToTop(mBinding.currentLocation);
-        mAnimations.moveUpAndExpand(mBinding.averageLocation);
-        mViewModel.isReadyForSharing.set(true);
         mAverager.stop();
+        mViewModel.isAveraging = false;
+        mViewModel.isReadyForSharing = true;
+        mViewModel.stopIcon.set(false);
         mIntents.answerToThirdParty(getActivity());
+        Animations.hideToTop(mBinding.currentLocation);
+        Animations.moveToTop(mBinding.averageLocation, new Animations.AnimationEndCallback() {
+            @Override
+            public void onAnimationEnd() {
+                mBinding.averageLocation.expand();
+            }
+        });
     }
 }
