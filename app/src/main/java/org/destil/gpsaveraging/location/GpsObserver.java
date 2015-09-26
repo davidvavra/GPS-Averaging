@@ -24,7 +24,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.squareup.otto.Bus;
 
@@ -112,7 +111,6 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
         } else {
             hasFix = false;
             if (status == LocationProvider.OUT_OF_SERVICE) {
-                Log.d("GPS Observer", "1");
                 mBus.post(new GpsNotAvailableEvent());
             }
         }
@@ -126,7 +124,6 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
         hasFix = false;
-        Log.d("GPS Observer", "2");
         mBus.post(new GpsNotAvailableEvent());
     }
 
