@@ -15,7 +15,8 @@
   ~ limitations under the License.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools"
+           tools:ignore="MissingTranslation">
     <!-- Static language-independent strings -->
     <string name="app_name" tools:translatable="false">GPS Averaging</string>
     <string name="heart" tools:translatable="false">♥</string>
